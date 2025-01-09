@@ -4,17 +4,8 @@
         <description><![CDATA[Tianyang Lin]]></description>
         <link>https://nil9.net</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Thu, 09 Jan 2025 16:05:15 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 09 Jan 2025 18:35:42 GMT</lastBuildDate>
         <atom:link href="https://nil9.net/feed.xml" rel="self" type="application/rss+xml"/>
-        <item>
-            <title><![CDATA[示例文章1]]></title>
-            <description><![CDATA[View examples of all possible Markdown options.]]></description>
-            <link>/posts/article1</link>
-            <guid isPermaLink="true">/posts/article1</guid>
-            <category><![CDATA[web development]]></category>
-            <dc:creator><![CDATA[You]]></dc:creator>
-            <pubDate>Fri, 19 Feb 2021 00:00:00 GMT</pubDate>
-        </item>
         <item>
             <title><![CDATA[Markdown Examples]]></title>
             <description><![CDATA[View examples of all possible Markdown options.]]></description>
@@ -23,15 +14,6 @@
             <category><![CDATA[web development]]></category>
             <dc:creator><![CDATA[You]]></dc:creator>
             <pubDate>Fri, 19 Mar 2021 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[Next.js Pages]]></title>
-            <description><![CDATA[Learn more about Next.js pages.]]></description>
-            <link>/posts/pages</link>
-            <guid isPermaLink="true">/posts/pages</guid>
-            <category><![CDATA[web development]]></category>
-            <dc:creator><![CDATA[You]]></dc:creator>
-            <pubDate>Thu, 18 Mar 2021 00:00:00 GMT</pubDate>
         </item>
     </channel>
 </rss>
