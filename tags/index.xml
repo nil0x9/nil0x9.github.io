@@ -14,10 +14,17 @@
     <lastBuildDate>Tue, 15 Sep 2020 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>First</title>
-      <link>https://nil9.net/tags/first/</link>
+      <title>另一个tag</title>
+      <link>https://nil9.net/tags/%E5%8F%A6%E4%B8%80%E4%B8%AAtag/</link>
       <pubDate>Tue, 15 Sep 2020 11:30:03 +0000</pubDate>
-      <guid>https://nil9.net/tags/first/</guid>
+      <guid>https://nil9.net/tags/%E5%8F%A6%E4%B8%80%E4%B8%AAtag/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>测试tag</title>
+      <link>https://nil9.net/tags/%E6%B5%8B%E8%AF%95tag/</link>
+      <pubDate>Tue, 15 Sep 2020 11:30:03 +0000</pubDate>
+      <guid>https://nil9.net/tags/%E6%B5%8B%E8%AF%95tag/</guid>
       <description></description>
     </item>
   </channel>
