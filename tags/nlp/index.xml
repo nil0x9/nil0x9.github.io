@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>NLP on nil9的博客</title>
+    <link>http://localhost:55440/tags/nlp/</link>
+    <description>Recent content in NLP on nil9的博客</description>
+    <image>
+      <title>nil9的博客</title>
+      <url>http://localhost:55440/images/android-chrome-512x512.png</url>
+      <link>http://localhost:55440/images/android-chrome-512x512.png</link>
+    </image>
+    <generator>Hugo -- 0.140.2</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 12 Jan 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:55440/tags/nlp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>关于语言模型中的Tied Embeddings</title>
+      <link>http://localhost:55440/posts/norm/</link>
+      <pubDate>Sun, 12 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:55440/posts/norm/</guid>
+      <description>&lt;p&gt;Tied embeddings，即将语言模型中的输入Embeddings权重与输出分类器的权重两组参数共享的操作，一度是语言建模和机器翻译任务的标准配置。
+但近来很多大规模语言模型不再使用tied embeddings了。
+本文&lt;/p&gt;
+&lt;p&gt;import Image from &amp;ldquo;next/image&amp;rdquo;;&lt;/p&gt;
+&lt;p&gt;&lt;Image
+src=&#34;http://localhost:55440/images/2025-01-11-weight-tying-loss.png&#34;
+alt=&#34;Initial loss for xformer decoder w/ tied and untied embeddings&#34;
+width={1125}
+height={750}
+priority
+className=&#34;next-image&#34;
+/&gt;&lt;/p&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://kexue.fm/archives/9698&#34;&gt;语言模型输出端共享Embedding的重新探索&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/667504988&#34;&gt;关于LLM结构中Tied Embedding的相关思考&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+  </channel>
+</rss>
