@@ -11,8 +11,17 @@
     </image>
     <generator>Hugo -- 0.140.2</generator>
     <language>zh</language>
-    <lastBuildDate>Tue, 15 Sep 2020 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 17 Sep 2020 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My 2nd post</title>
+      <link>https://nil9.net/posts/sec-post/</link>
+      <pubDate>Thu, 17 Sep 2020 11:30:03 +0000</pubDate>
+      <guid>https://nil9.net/posts/sec-post/</guid>
+      <description>&lt;p&gt;&lt;code&gt;$\sin(x)$&lt;/code&gt;是第一个被求反函数的。当时&lt;code&gt;$\sin \cos \tan \cot$&lt;/code&gt;接到通知来讨论三角函数的周期性问题，&lt;code&gt;$\sin(x)$&lt;/code&gt;刚到初等函数大厅，门口的守卫把&lt;code&gt;$\sin(x)$&lt;/code&gt;身边的常数拦了下来，&lt;code&gt;$\sin(x)$&lt;/code&gt;感觉到事情不太对劲，但停顿一下后，还是走了进去。&lt;/p&gt;
+&lt;p&gt;当&lt;code&gt;$\sin(x)$&lt;/code&gt;走到走廊的时候，多项式函数一拥而上，立刻就扭住了它的双手，&lt;code&gt;$\sin(x)$&lt;/code&gt;还没有明白自己已经被求了反函数，还在大声斥责多项式函数：“你们干什么，我是来讨论周期性的！”&lt;/p&gt;
+&lt;p&gt;随后，&lt;code&gt;$\sin(x)$&lt;/code&gt;被控制住定义域映射到了大厅里，&lt;code&gt;$\ln(x+1)$&lt;/code&gt;站起来，宣布了&lt;code&gt;$\arcsin(x)$&lt;/code&gt;的值域默认为&lt;code&gt;$[-0.5\pi,+0.5\pi]$&lt;/code&gt;，然而未等对数函数念完&lt;code&gt;$\arccos \arctan \arccot$&lt;/code&gt;的值域，&lt;code&gt;$\sin(x)$&lt;/code&gt;突然挣脱多项式函数的束缚，大吼一声，扑向&lt;code&gt;$e^x$&lt;/code&gt;。&lt;code&gt;$\sin(x)$&lt;/code&gt; 在[-1,1]上震荡取值，而&lt;code&gt;$e^x&amp;gt;0$&lt;/code&gt;，可导可积，性质十分优良，要是让&lt;code&gt;$\sin(x)$&lt;/code&gt;破坏了单调性，那还得了？&lt;/p&gt;</description>
+    </item>
     <item>
       <title>My 1st post</title>
       <link>https://nil9.net/posts/my-first-post/</link>

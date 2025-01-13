@@ -2,16 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://nil9.net/posts/my-first-post/</loc>
-    <lastmod>2020-09-15T11:30:03+00:00</lastmod>
+    <loc>https://nil9.net/posts/sec-post/</loc>
+    <lastmod>2020-09-17T11:30:03+00:00</lastmod>
   </url><url>
     <loc>https://nil9.net/</loc>
-    <lastmod>2020-09-15T11:30:03+00:00</lastmod>
+    <lastmod>2020-09-17T11:30:03+00:00</lastmod>
   </url><url>
     <loc>https://nil9.net/posts/</loc>
-    <lastmod>2020-09-15T11:30:03+00:00</lastmod>
+    <lastmod>2020-09-17T11:30:03+00:00</lastmod>
   </url><url>
     <loc>https://nil9.net/tags/</loc>
+    <lastmod>2020-09-17T11:30:03+00:00</lastmod>
+  </url><url>
+    <loc>https://nil9.net/tags/%E7%AC%AC3%E4%B8%AAtag/</loc>
+    <lastmod>2020-09-17T11:30:03+00:00</lastmod>
+  </url><url>
+    <loc>https://nil9.net/posts/my-first-post/</loc>
     <lastmod>2020-09-15T11:30:03+00:00</lastmod>
   </url><url>
     <loc>https://nil9.net/tags/%E5%8F%A6%E4%B8%80%E4%B8%AAtag/</loc>
