@@ -33,7 +33,9 @@ a_{1} + b_{1}
 ]&lt;/p&gt;
 &lt;p&gt;$$
 \frac{\partial E(\boldsymbol{w})}{\partial z_j} = \sum\limits_{k}\frac{\partial E(\boldsymbol{w})}{\partial y_{k}}\frac{\partial y_k}{\partial z_{j}}= \sum\limits_{k} (y_{k}- \hat{y}&lt;em&gt;{k}) w&lt;/em&gt;{kj}^{(2)} \tag{5.11}
-$$&lt;/p&gt;</description>
+$$&lt;/p&gt;
+&lt;p&gt;必须wrap code block才可以显示：&lt;code&gt;$(\text{softmax}(QK^\top)$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \frac{\partial E(\boldsymbol{w})}{\partial z_j} = \sum\limits_{k}\frac{\partial E(\boldsymbol{w})}{\partial y_{k}}\frac{\partial y_k}{\partial z_{j}}= \sum\limits_{k} (y_{k}- \hat{y}_{k}) w_{kj}^{(2)} \tag{5.11} $$&lt;/code&gt;&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
