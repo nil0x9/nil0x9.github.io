@@ -2,34 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://nil9.net/posts/sec-post/</loc>
-    <lastmod>2020-09-17T11:30:03+00:00</lastmod>
-  </url><url>
-    <loc>https://nil9.net/</loc>
-    <lastmod>2020-09-17T11:30:03+00:00</lastmod>
-  </url><url>
-    <loc>https://nil9.net/posts/</loc>
-    <lastmod>2020-09-17T11:30:03+00:00</lastmod>
-  </url><url>
-    <loc>https://nil9.net/tags/</loc>
-    <lastmod>2020-09-17T11:30:03+00:00</lastmod>
-  </url><url>
-    <loc>https://nil9.net/tags/%E7%AC%AC3%E4%B8%AAtag/</loc>
-    <lastmod>2020-09-17T11:30:03+00:00</lastmod>
-  </url><url>
-    <loc>https://nil9.net/posts/my-first-post/</loc>
-    <lastmod>2020-09-15T11:30:03+00:00</lastmod>
-  </url><url>
-    <loc>https://nil9.net/tags/%E5%8F%A6%E4%B8%80%E4%B8%AAtag/</loc>
-    <lastmod>2020-09-15T11:30:03+00:00</lastmod>
-  </url><url>
-    <loc>https://nil9.net/tags/%E6%B5%8B%E8%AF%95tag/</loc>
-    <lastmod>2020-09-15T11:30:03+00:00</lastmod>
-  </url><url>
     <loc>https://nil9.net/archives/</loc>
   </url><url>
     <loc>https://nil9.net/categories/</loc>
   </url><url>
+    <loc>https://nil9.net/</loc>
+  </url><url>
     <loc>https://nil9.net/search/</loc>
+  </url><url>
+    <loc>https://nil9.net/tags/</loc>
   </url>
 </urlset>

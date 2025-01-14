@@ -11,35 +11,6 @@
     </image>
     <generator>Hugo -- 0.140.2</generator>
     <language>zh</language>
-    <lastBuildDate>Thu, 17 Sep 2020 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>My 2nd post</title>
-      <link>https://nil9.net/posts/sec-post/</link>
-      <pubDate>Thu, 17 Sep 2020 11:30:03 +0000</pubDate>
-      <guid>https://nil9.net/posts/sec-post/</guid>
-      <description>&lt;p&gt;&lt;code&gt;$\sin(x)$&lt;/code&gt;是第一个被求反函数的。当时&lt;code&gt;$\sin \cos \tan \cot$&lt;/code&gt;接到通知来讨论三角函数的周期性问题，&lt;code&gt;$\sin(x)$&lt;/code&gt;刚到初等函数大厅，门口的守卫把&lt;code&gt;$\sin(x)$&lt;/code&gt;身边的常数拦了下来，&lt;code&gt;$\sin(x)$&lt;/code&gt;感觉到事情不太对劲，但停顿一下后，还是走了进去。&lt;/p&gt;
-&lt;p&gt;当&lt;code&gt;$\sin(x)$&lt;/code&gt;走到走廊的时候，多项式函数一拥而上，立刻就扭住了它的双手，&lt;code&gt;$\sin(x)$&lt;/code&gt;还没有明白自己已经被求了反函数，还在大声斥责多项式函数：“你们干什么，我是来讨论周期性的！”&lt;/p&gt;
-&lt;p&gt;随后，&lt;code&gt;$\sin(x)$&lt;/code&gt;被控制住定义域映射到了大厅里，&lt;code&gt;$\ln(x+1)$&lt;/code&gt;站起来，宣布了&lt;code&gt;$\arcsin(x)$&lt;/code&gt;的值域默认为&lt;code&gt;$[-0.5\pi,+0.5\pi]$&lt;/code&gt;，然而未等对数函数念完&lt;code&gt;$\arccos \arctan \arccot$&lt;/code&gt;的值域，&lt;code&gt;$\sin(x)$&lt;/code&gt;突然挣脱多项式函数的束缚，大吼一声，扑向&lt;code&gt;$e^x$&lt;/code&gt;。&lt;code&gt;$\sin(x)$&lt;/code&gt; 在[-1,1]上震荡取值，而&lt;code&gt;$e^x&amp;gt;0$&lt;/code&gt;，可导可积，性质十分优良，要是让&lt;code&gt;$\sin(x)$&lt;/code&gt;破坏了单调性，那还得了？&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>My 1st post</title>
-      <link>https://nil9.net/posts/my-first-post/</link>
-      <pubDate>Tue, 15 Sep 2020 11:30:03 +0000</pubDate>
-      <guid>https://nil9.net/posts/my-first-post/</guid>
-      <description>&lt;p&gt;sinx是第一个被求反函数的。当时sin cos tan cot接到通知来讨论三角函数的周期性问题，sinx刚到初等函数大厅，门口的守卫把sinx身边的常数拦了下来，sinx感觉到事情不太对劲，但停顿一下后，还是走了进去。&lt;/p&gt;
-&lt;p&gt;当sinx走到走廊的时候，多项式函数一拥而上，立刻就扭住了它的双手，sinx还没有明白自己已经被求了反函数，还在大声斥责多项式函数：“你们干什么，我是来讨论周期性的！”&lt;/p&gt;
-&lt;p&gt;随后，sinx被控制住定义域映射到了大厅里，ln(x+1)站起来，宣布了arcsin x的值域默认为[-0.5pi,+0.5pi]，然而未等对数函数念完arccos arctan arccot的值域，sinx突然挣脱多项式函数的束缚，大吼一声，扑向e^x。sinx 在[-1,1]上震荡取值，而e^x&amp;gt;0，可导可积，性质十分优良，要是让sinx破坏了单调性，那还得了？&lt;/p&gt;
-&lt;p&gt;e^x毕竟是久经求导的老将了，显得非常镇定，坐在那里一动不动，就在距离e^x一个单位的时候，几个多项式函数冲上来死死的按住了他，给他戴上了手铐。在整个积化和差的过程中，sinx的变换用的是最多的，后续规定它反函数的值域也是最严格的。&lt;/p&gt;
-&lt;h2 id=&#34;测试&#34;&gt;测试&lt;/h2&gt;
-&lt;p&gt;行内公式&lt;code&gt;$(\text{softmax}(QK^\top)$&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;display公式：
-&lt;code&gt;$$ \frac{\partial E(\boldsymbol{w})}{\partial z_j} = \sum\limits_{k}\frac{\partial E(\boldsymbol{w})}{\partial y_{k}}\frac{\partial y_k}{\partial z_{j}}= \sum\limits_{k} (y_{k}- \hat{y}_{k}) w_{kj}^{(2)} \tag{5.11} $$&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;测试标题2&#34;&gt;测试标题2&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;$\sin(x)$&lt;/code&gt;是第一个被求反函数的。当时&lt;code&gt;$\sin \cos \tan \cot$&lt;/code&gt;接到通知来讨论三角函数的周期性问题，&lt;code&gt;$\sin(x)$&lt;/code&gt;刚到初等函数大厅，门口的守卫把&lt;code&gt;$\sin(x)$&lt;/code&gt;身边的常数拦了下来，&lt;code&gt;$\sin(x)$&lt;/code&gt;感觉到事情不太对劲，但停顿一下后，还是走了进去。&lt;/p&gt;
-&lt;p&gt;当&lt;code&gt;$\sin(x)$&lt;/code&gt;走到走廊的时候，多项式函数一拥而上，立刻就扭住了它的双手，&lt;code&gt;$\sin(x)$&lt;/code&gt;还没有明白自己已经被求了反函数，还在大声斥责多项式函数：“你们干什么，我是来讨论周期性的！”&lt;/p&gt;
-&lt;p&gt;随后，&lt;code&gt;$\sin(x)$&lt;/code&gt;被控制住定义域映射到了大厅里，&lt;code&gt;$\ln(x+1)$&lt;/code&gt;站起来，宣布了&lt;code&gt;$\arcsin(x)$&lt;/code&gt;的值域默认为&lt;code&gt;$[-0.5\pi,+0.5\pi]$&lt;/code&gt;，然而未等对数函数念完&lt;code&gt;$\arccos \arctan \arccot$&lt;/code&gt;的值域，&lt;code&gt;$\sin(x)$&lt;/code&gt;突然挣脱多项式函数的束缚，大吼一声，扑向&lt;code&gt;$e^x$&lt;/code&gt;。&lt;code&gt;$\sin(x)$&lt;/code&gt; 在[-1,1]上震荡取值，而&lt;code&gt;$e^x&amp;gt;0$&lt;/code&gt;，可导可积，性质十分优良，要是让&lt;code&gt;$\sin(x)$&lt;/code&gt;破坏了单调性，那还得了？&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;$e^x$&lt;/code&gt;毕竟是久经求导的老将了，显得非常镇定，坐在那里一动不动，就在距离&lt;code&gt;$e^x$&lt;/code&gt;一个单位的时候，几个多项式函数冲上来死死的按住了他，给他戴上了手铐。在整个积化和差的过程中，&lt;code&gt;$\sin(x)$&lt;/code&gt;的变换用的是最多的，后续规定它反函数的值域也是最严格的。&lt;/p&gt;</description>
-    </item>
   </channel>
 </rss>
