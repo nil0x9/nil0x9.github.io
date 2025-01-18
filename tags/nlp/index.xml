@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Posts on nil9.net</title>
-    <link>https://nil9.net/posts/</link>
-    <description>Recent content in Posts on nil9.net</description>
+    <title>NLP on nil9.net</title>
+    <link>https://nil9.net/tags/nlp/</link>
+    <description>Recent content in NLP on nil9.net</description>
     <image>
       <title>nil9.net</title>
       <url>https://nil9.net/images/android-chrome-512x512.png</url>
@@ -12,7 +12,7 @@
     <generator>Hugo -- 0.141.0</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 18 Jan 2025 12:05:31 +0000</lastBuildDate>
-    <atom:link href="https://nil9.net/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://nil9.net/tags/nlp/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>关于语言建模中的Tied Embeddings的一点探讨</title>
       <link>https://nil9.net/posts/tied-embeddings-in-lm/</link>
@@ -30,22 +30,6 @@
 &lt;p&gt;以上是苏文中给出的关于语言建模中不再共享embedding的一个视角——tied embeddings会使语言模型的初始损失值很大。&lt;/p&gt;
 &lt;p&gt;但这个问题实际上可以用一个rescale来解决，我们可以简单地将输出端乘以&lt;code&gt;$1/\sqrt{d}$&lt;/code&gt;，则损失函数可以做如下近似
 &lt;code&gt;$$ \begin{align}\mathcal{L} &amp;amp;= \log \sum\limits_k e^{\boldsymbol{w}_i\cdot \boldsymbol{w}_k / (\sigma\sqrt{d})} - \boldsymbol{w}_i\cdot \boldsymbol{w}_j  \big/(\sigma\sqrt{d}) \\ &amp;amp;\approx\log \left({\color{blue}e^{\sigma\sqrt{d}}} + (n-1)\right) \end{align} $$&lt;/code&gt;&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>单纯测试一下mathjax</title>
-      <link>https://nil9.net/posts/test-post/</link>
-      <pubDate>Fri, 10 Jan 2025 11:30:03 +0000</pubDate>
-      <guid>https://nil9.net/posts/test-post/</guid>
-      <description>&lt;p&gt;&lt;code&gt;$\sin(x)$&lt;/code&gt;是第一个被求反函数的。当时&lt;code&gt;$\sin \cos \tan \cot$&lt;/code&gt;接到通知来讨论三角函数的周期性问题，&lt;code&gt;$\sin(x)$&lt;/code&gt;刚到初等函数大厅，门口的守卫把&lt;code&gt;$\sin(x)$&lt;/code&gt;身边的常数拦了下来，&lt;code&gt;$\sin(x)$&lt;/code&gt;感觉到事情不太对劲，但停顿一下后，还是走了进去。&lt;/p&gt;
-&lt;p&gt;当&lt;code&gt;$\sin(x)$&lt;/code&gt;走到走廊的时候，多项式函数一拥而上，立刻就扭住了它的双手，&lt;code&gt;$\sin(x)$&lt;/code&gt;还没有明白自己已经被求了反函数，还在大声斥责多项式函数：“你们干什么，我是来讨论周期性的！”&lt;/p&gt;
-&lt;p&gt;随后，&lt;code&gt;$\sin(x)$&lt;/code&gt;被控制住定义域映射到了大厅里，&lt;code&gt;$\ln(x+1)$&lt;/code&gt;站起来，宣布了&lt;code&gt;$\arcsin(x)$&lt;/code&gt;的值域默认为&lt;code&gt;$[-0.5\pi,+0.5\pi]$&lt;/code&gt;，然而未等对数函数念完&lt;code&gt;$\arccos \arctan \arccot$&lt;/code&gt;的值域，&lt;code&gt;$\sin(x)$&lt;/code&gt;突然挣脱多项式函数的束缚，大吼一声，扑向&lt;code&gt;$e^x$&lt;/code&gt;。&lt;code&gt;$\sin(x)$&lt;/code&gt; 在[-1,1]上震荡取值，而&lt;code&gt;$e^x&amp;gt;0$&lt;/code&gt;，可导可积，性质十分优良，要是让&lt;code&gt;$\sin(x)$&lt;/code&gt;破坏了单调性，那还得了？&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;shared&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# https://github.com/tensorflow/mesh/blob/fa19d69eafc9a482aff0b59ddd96b025c0cb207d/mesh_tensorflow/transformer/transformer.py#L586&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shared_embedding_and_softmax_weights:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      logits &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mtf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;einsum(
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          [x &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;model_dim&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;size &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;), embedding_weights],
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          reduced_dims&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;model_dim])
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
   </channel>
 </rss>
