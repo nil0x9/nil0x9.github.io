@@ -11,23 +11,25 @@
     </image>
     <generator>Hugo -- 0.141.0</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 10 Jan 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jan 2025 15:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>单纯测试一下mathjax</title>
-      <link>https://nil9.net/posts/test-post/</link>
-      <pubDate>Fri, 10 Jan 2025 11:30:03 +0000</pubDate>
-      <guid>https://nil9.net/posts/test-post/</guid>
-      <description>&lt;p&gt;&lt;code&gt;$\sin(x)$&lt;/code&gt;是第一个被求反函数的。当时&lt;code&gt;$\sin \cos \tan \cot$&lt;/code&gt;接到通知来讨论三角函数的周期性问题，&lt;code&gt;$\sin(x)$&lt;/code&gt;刚到初等函数大厅，门口的守卫把&lt;code&gt;$\sin(x)$&lt;/code&gt;身边的常数拦了下来，&lt;code&gt;$\sin(x)$&lt;/code&gt;感觉到事情不太对劲，但停顿一下后，还是走了进去。&lt;/p&gt;
-&lt;p&gt;当&lt;code&gt;$\sin(x)$&lt;/code&gt;走到走廊的时候，多项式函数一拥而上，立刻就扭住了它的双手，&lt;code&gt;$\sin(x)$&lt;/code&gt;还没有明白自己已经被求了反函数，还在大声斥责多项式函数：“你们干什么，我是来讨论周期性的！”&lt;/p&gt;
-&lt;p&gt;随后，&lt;code&gt;$\sin(x)$&lt;/code&gt;被控制住定义域映射到了大厅里，&lt;code&gt;$\ln(x+1)$&lt;/code&gt;站起来，宣布了&lt;code&gt;$\arcsin(x)$&lt;/code&gt;的值域默认为&lt;code&gt;$[-0.5\pi,+0.5\pi]$&lt;/code&gt;，然而未等对数函数念完&lt;code&gt;$\arccos \arctan \arccot$&lt;/code&gt;的值域，&lt;code&gt;$\sin(x)$&lt;/code&gt;突然挣脱多项式函数的束缚，大吼一声，扑向&lt;code&gt;$e^x$&lt;/code&gt;。&lt;code&gt;$\sin(x)$&lt;/code&gt; 在[-1,1]上震荡取值，而&lt;code&gt;$e^x&amp;gt;0$&lt;/code&gt;，可导可积，性质十分优良，要是让&lt;code&gt;$\sin(x)$&lt;/code&gt;破坏了单调性，那还得了？&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;shared&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# https://github.com/tensorflow/mesh/blob/fa19d69eafc9a482aff0b59ddd96b025c0cb207d/mesh_tensorflow/transformer/transformer.py#L586&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shared_embedding_and_softmax_weights:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      logits &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mtf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;einsum(
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          [x &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;model_dim&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;size &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;), embedding_weights],
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          reduced_dims&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;model_dim])
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      <title>关于语言建模中的Tied Embeddings的一点探讨</title>
+      <link>https://nil9.net/posts/tied-embeddings-in-lm/</link>
+      <pubDate>Sat, 18 Jan 2025 15:00:41 +0000</pubDate>
+      <guid>https://nil9.net/posts/tied-embeddings-in-lm/</guid>
+      <description>&lt;p&gt;Tied embeddings，即将语言模型中的输入Embeddings权重与输出分类器的权重两组参数共享的操作，一度是语言建模和机器翻译任务的标准配置。在语言模型大规模化之后，这种设计在开源模型中愈发少见了。前几天看到&lt;a href=&#34;https://www.zhihu.com/people/su-jian-lin-22&#34;&gt;@苏剑林&lt;/a&gt; 之前的一篇博客&lt;a href=&#34;https://kexue.fm/archives/9698&#34;&gt;语言模型输出端共享Embedding的重新探索&lt;/a&gt;，为tied embeddings的消失提供了一种视角，但也还有值得商榷的地方，本文想从这篇文章出发做一点探讨。&lt;/p&gt;
+&lt;h1 id=&#34;初始loss的视角&#34;&gt;初始Loss的视角&lt;/h1&gt;
+&lt;p&gt;这里先简要概括一下苏老师文章中的阐述框架&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。在使用Transformer做语言建模的时候，可能会使用类似DeepNorm等初始化手段，从而使每一个Transformer Block接近于一个恒等映射&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;，同时由于词元表征是0均值的，因此LayerNorm可以看做与RMSNorm等价&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;。所以，假设每个残差分支都初始化为0，假设输入中某个位置的初始embedding是&lt;code&gt;$\boldsymbol{w}_i$&lt;/code&gt;（对应词表中的第&lt;code&gt;$i$&lt;/code&gt;个词，维度是&lt;code&gt;$d$&lt;/code&gt;），那么最终得到的表征满足&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \frac{\boldsymbol{w}_i}{\Vert\boldsymbol{w}_i\Vert \big/\sqrt{d}} \approx \frac{\boldsymbol{w}_i}{\sigma} $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;假设在该位置的真实标签是词元&lt;code&gt;$j$&lt;/code&gt;，则损失函数可以由如下逼近&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \begin{align}\mathcal{L}\triangleq -\log p(j|i) &amp;amp;= \log \sum\limits_k e^{\boldsymbol{w}_i\cdot \boldsymbol{w}_k / \sigma} - \boldsymbol{w}_i\cdot \boldsymbol{w}_j \big/ \sigma \\ &amp;amp;\approx \log \sum_k e^{\boldsymbol{w}_i\cdot \boldsymbol{w}_k / \sigma}\\ &amp;amp;=\log \left(e^{\boldsymbol{w}_i\cdot \boldsymbol{w}_i / \sigma} + \sum\limits_{k|k\neq i} e^{\boldsymbol{w}_i\cdot \boldsymbol{w}_k / \sigma}\right)\\ &amp;amp;\approx\log \left({\color{blue}e^{d \sigma}} + (n-1)\right) \end{align} $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;其中&lt;code&gt;$|n|$&lt;/code&gt;是词表大小。在常见的模型维度下，这里的第一项&lt;code&gt;${\color{blue}e^{d \sigma}}$&lt;/code&gt;是比较大的。我们可以代入几个维度值看下第一项的大小，这里我们假设词表大小是32k，并考虑两种&lt;code&gt;$\sigma$&lt;/code&gt;取法，一种是比较常见的初始化超参数&lt;code&gt;$\sigma=0.02$&lt;/code&gt;，一种是取&lt;code&gt;$\sigma=1/\sqrt{d}$&lt;/code&gt;。可以看到无论是哪种初始化方法，对应的&lt;code&gt;${\color{blue}e^{d \sigma}}$&lt;/code&gt;都已经远远超过词表大小，响应地初始损失值也处于比较高的水平（按均匀分布的交叉熵是&lt;code&gt;$\log(n)\approx 10.37$&lt;/code&gt;）。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+  &lt;img loading=&#34;lazy&#34; src=&#34;https://nil9.net/images/tied-embeddings-in-lm/init_loss.png&#34; title=&#34;不同设定下的「初始损失值」&#34;&gt;&lt;figcaption class=&#34;image-caption&#34;&gt;不同设定下的「初始损失值」&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;以上是苏文中给出的关于语言建模中不再共享embedding的一个视角——tied embeddings会使语言模型的初始损失值很大。&lt;/p&gt;
+&lt;p&gt;但这个问题实际上可以用一个rescale来解决，我们可以简单地将输出端乘以&lt;code&gt;$1/\sqrt{d}$&lt;/code&gt;，则损失函数可以做如下近似
+&lt;code&gt;$$ \begin{align}\mathcal{L} &amp;amp;= \log \sum\limits_k e^{\boldsymbol{w}_i\cdot \boldsymbol{w}_k / (\sigma\sqrt{d})} - \boldsymbol{w}_i\cdot \boldsymbol{w}_j  \big/(\sigma\sqrt{d}) \\ &amp;amp;\approx\log \left({\color{blue}e^{\sigma\sqrt{d}}} + (n-1)\right) \end{align} $$&lt;/code&gt;&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
