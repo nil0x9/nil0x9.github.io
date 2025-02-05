@@ -9,7 +9,7 @@ Score function与FIM 假设我们有一个由$\theta$参数化的概率模型，
 定义1（score function）：score function $s(\theta|x)$被定义为对数似然函数关于参数$\theta$的梯度
 $$ s(\theta|x)=\nabla_\theta \ell(\theta|x) $$
 一些文章会提到score function是用来为参数的好坏打分（score），这是不严谨的。score function中的「score」其实不是为参数打分，而是在Fisher研究的遗传统计问题中给基因异常家庭的「打分」(参见：Interpretation of “score”)。因此，score function只是约定俗成的一种名称，其实质就是似然函数的梯度，描述的是似然函数对于参数变化的敏感程度。
-性质1：Score function期望为0（$\mathbb{E}_{p(x|\theta)}[s(\theta|x)]=\boldsymbol{0}$）.
+性质1：Score function期望为0 $$ \mathbb{E}_{p(x|\theta)}[s(\theta|x)]=\boldsymbol{0} $$
 proof
 ...</p></div><footer class=entry-footer><span title='2025-02-05 00:00:41 +0000 UTC'>2025-02-05</span>&nbsp;·&nbsp;Tianyang Lin</footer><a class=entry-link aria-label="post link to 自然梯度（一）：Fisher信息矩阵作为黎曼度量" href=https://nil9.net/posts/fisher-info-matrix/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>关于语言建模中的Tied Embeddings的一点探讨</h2></header><div class=entry-content><p>Tied embeddings，即将语言模型中的输入Embeddings权重与输出分类器的权重两组参数共享的操作，一度是语言建模和机器翻译任务的标准配置。在语言模型大规模化之后，这种设计在开源模型中愈发少见了。前几天看到@苏剑林 之前的一篇博客语言模型输出端共享Embedding的重新探索，为tied embeddings的消失提供了一种视角，但也还有值得商榷的地方，本文想从这篇文章出发做一点探讨。
 初始Loss的视角 这里先简要概括一下苏老师文章中的阐述框架1。在使用Transformer做语言建模的时候，可能会使用类似DeepNorm等初始化手段，从而使每一个Transformer Block接近于一个恒等映射2，同时由于词元表征是0均值的，因此LayerNorm可以看做与RMSNorm等价3。所以，假设每个残差分支都初始化为0，假设输入中某个位置的初始embedding是$\boldsymbol{w}_i$（对应词表中的第$i$个词，维度是$d$），那么最终得到的表征满足

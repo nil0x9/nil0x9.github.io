@@ -6,7 +6,7 @@ Score function与FIM 假设我们有一个由$\theta$参数化的概率模型，
 定义1（score function）：score function $s(\theta|x)$被定义为对数似然函数关于参数$\theta$的梯度
 $$ s(\theta|x)=\nabla_\theta \ell(\theta|x) $$
 一些文章会提到score function是用来为参数的好坏打分（score），这是不严谨的。score function中的「score」其实不是为参数打分，而是在Fisher研究的遗传统计问题中给基因异常家庭的「打分」(参见：Interpretation of “score”)。因此，score function只是约定俗成的一种名称，其实质就是似然函数的梯度，描述的是似然函数对于参数变化的敏感程度。
-性质1：Score function期望为0（$\mathbb{E}_{p(x|\theta)}[s(\theta|x)]=\boldsymbol{0}$）.
+性质1：Score function期望为0 $$ \mathbb{E}_{p(x|\theta)}[s(\theta|x)]=\boldsymbol{0} $$
 proof
 ...</p></div><footer class=entry-footer><span title='2025-02-05 00:00:41 +0000 UTC'>2025-02-05</span>&nbsp;·&nbsp;Tianyang Lin</footer><a class=entry-link aria-label="post link to 自然梯度（一）：Fisher信息矩阵作为黎曼度量" href=https://nil9.net/posts/fisher-info-matrix/></a></article></main><footer class=footer><span>&copy; 2025 <a href=https://nil9.net/>nil9.net</a></span> ·
 All rights reserved ·</footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
