@@ -9,10 +9,130 @@
       <url>https://nil9.net/images/android-chrome-512x512.png</url>
       <link>https://nil9.net/images/android-chrome-512x512.png</link>
     </image>
-    <generator>Hugo -- 0.142.0</generator>
+    <generator>Hugo -- 0.143.1</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 18 Jan 2025 15:00:41 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 05 Feb 2025 00:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>自然梯度（一）：Fisher信息矩阵作为黎曼度量</title>
+      <link>https://nil9.net/posts/fisher-info-matrix/</link>
+      <pubDate>Wed, 05 Feb 2025 00:00:41 +0000</pubDate>
+      <guid>https://nil9.net/posts/fisher-info-matrix/</guid>
+      <description>&lt;p&gt;在一般的梯度下降中，我们认为目标函数梯度的负方向可以最小化一步更新后的目标函数值，这里隐含地假设了参数空间是欧氏空间，且参数构成了一组正交归一的坐标系统。在很多情况下，这一假设是不成立的，作为结果，优化过程的收敛效率可能受到影响。&lt;/p&gt;
+&lt;p&gt;作为解决这一问题的一种思路，自然梯度使用Fisher信息矩阵（的逆）作为梯度的pre-conditioner来矫正梯度的方向。本文将分为两篇，在第一篇中，我们从Fisher信息矩阵（FIM）的定义出发，推导出Fisher矩阵与KL散度的关系，并建立如下结论：FIM可以作为概率模型的参数空间的一种黎曼度量。在第二篇中，我们介绍自然梯度中如何引入FIM来修正梯度方向，以及其带来的一些性质。&lt;/p&gt;
+&lt;h1 id=&#34;score-function与fim&#34;&gt;Score function与FIM&lt;/h1&gt;
+&lt;p&gt;假设我们有一个由&lt;code&gt;$\theta$&lt;/code&gt;参数化的概率模型，模型分布为&lt;code&gt;$p(x|\theta)$&lt;/code&gt;，记对数似然函数为&lt;code&gt;$\ell(\theta|x):=\log p(x|\theta)$&lt;/code&gt;。与对数似然函数相关的有两个定义，score function和fisher information。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;定义1（score function）&lt;/strong&gt;：score function &lt;code&gt;$s(\theta|x)$&lt;/code&gt;被定义为对数似然函数关于参数&lt;code&gt;$\theta$&lt;/code&gt;的梯度&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ s(\theta|x)=\nabla_\theta \ell(\theta|x) $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;一些文章会提到score function是用来为参数的好坏打分（score），这是不严谨的。score function中的「score」其实不是为参数打分，而是在Fisher研究的遗传统计问题中给基因异常家庭的「打分」(参见：&lt;a href=&#34;https://stats.stackexchange.com/questions/326091/interpretation-of-score&#34;&gt;Interpretation of &amp;ldquo;score&amp;rdquo;&lt;/a&gt;)。因此，score function只是约定俗成的一种名称，其实质就是似然函数的梯度，描述的是似然函数对于参数变化的敏感程度。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;性质1&lt;/strong&gt;：Score function期望为0（&lt;code&gt;$\mathbb{E}_{p(x|\theta)}[s(\theta|x)]=\boldsymbol{0}$&lt;/code&gt;）.&lt;/p&gt;
+&lt;style type=&#34;text/css&#34;&gt;
+     
+    .notice {
+        --title-color: #fff;
+        --title-background-color: #6be;
+        --content-color: #444;
+        --content-background-color: #e7f2fa;
+    }
+
+    .notice.proof {
+        --title-background-color: rgb(130, 130, 130);
+        --content-background-color: #f7f7f7;
+    }
+
+    .notice.info {
+        --title-background-color: #fb7;
+        --content-background-color: #fec;
+    }
+
+    .notice.tip {
+        --title-background-color: #5a5;
+        --content-background-color: #efe;
+    }
+
+    .notice.warning {
+        --title-background-color: #c33;
+        --content-background-color: #fee;
+    }
+
+     
+
+    body.dark .notice {
+        --title-color: #fff;
+        --title-background-color: #069;
+        --content-color: #ddd;
+        --content-background-color: #023;
+    }
+
+    body.dark .notice.proof {
+        --title-background-color: rgb(129, 129, 129);
+        --content-background-color: rgb(41, 41, 41);
+    }
+
+    body.dark .notice.info {
+        --title-background-color: #a50;
+        --content-background-color: #420;
+    }
+
+    body.dark .notice.tip {
+        --title-background-color: #363;
+        --content-background-color: #121;
+    }
+
+    body.dark .notice.warning {
+        --title-background-color: #800;
+        --content-background-color: #400;
+    }
+
+     
+    .notice {
+        padding: 18px;
+        line-height: 24px;
+        margin-bottom: 24px;
+        border-radius: 4px;
+        color: var(--content-color);
+        background: var(--content-background-color);
+    }
+
+    .notice p:last-child {
+        margin-bottom: 0
+    }
+
+     
+    .notice-title {
+        margin: -18px -18px 12px;
+        padding: 4px 18px;
+        border-radius: 4px 4px 0 0;
+        font-weight: 700;
+        color: var(--title-color);
+        background: var(--title-background-color);
+    }
+
+     
+    .icon-notice {
+        display: inline-flex;
+        align-self: center;
+        margin-right: 8px;
+    }
+
+    .icon-notice img,
+    .icon-notice svg {
+        height: 1em;
+        width: 1em;
+        fill: currentColor;
+    }
+
+    .icon-notice img,
+    .icon-notice.baseline svg {
+        top: .125em;
+        position: relative;
+    }
+&lt;/style&gt;&lt;div class=&#34;notice proof&#34; &gt;
+    &lt;p class=&#34;notice-title&#34;&gt;
+        &lt;span class=&#34;icon-notice baseline&#34;&gt;
+            
+        &lt;/span&gt;proof&lt;/p&gt;</description>
+    </item>
     <item>
       <title>关于语言建模中的Tied Embeddings的一点探讨</title>
       <link>https://nil9.net/posts/tied-embeddings-in-lm/</link>
