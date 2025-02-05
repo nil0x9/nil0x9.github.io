@@ -19,7 +19,7 @@
       <pubDate>Wed, 05 Feb 2025 00:00:41 +0000</pubDate>
       <guid>https://nil9.net/posts/fisher-info-matrix/</guid>
       <description>&lt;p&gt;在一般的梯度下降中，我们认为目标函数梯度的负方向可以最小化一步更新后的目标函数值，这里隐含地假设了参数空间是欧氏空间，且参数构成了一组正交归一的坐标系统。在很多情况下，这一假设是不成立的，作为结果，优化过程的收敛效率可能受到影响。&lt;/p&gt;
-&lt;p&gt;作为解决这一问题的一种思路，自然梯度使用Fisher信息矩阵（的逆）作为梯度的pre-conditioner来矫正梯度的方向。本文将分为两篇，在第一篇中，我们从Fisher信息矩阵（FIM）的定义出发，推导出Fisher矩阵与KL散度的关系，并建立如下结论：FIM可以作为概率模型的参数空间的一种黎曼度量。在第二篇中，我们介绍自然梯度中如何引入FIM来修正梯度方向，以及其带来的一些性质。&lt;/p&gt;
+&lt;p&gt;作为解决这一问题的一种思路，自然梯度使用Fisher信息矩阵（的逆）作为梯度的pre-conditioner来矫正梯度的方向。本文将分为两篇，在第一篇中，我们从Fisher信息矩阵（FIM）的定义出发，推导出Fisher矩阵与KL散度的关系，并建立如下结论：FIM可以作为概率模型的参数空间的一种黎曼度量。在第二篇中，我们推导自然梯度中为何引入FIM来修正梯度方向，以及自然梯度的一些性质。&lt;/p&gt;
 &lt;h1 id=&#34;score-function与fim&#34;&gt;Score function与FIM&lt;/h1&gt;
 &lt;p&gt;假设我们有一个由&lt;code&gt;$\theta$&lt;/code&gt;参数化的概率模型，模型分布为&lt;code&gt;$p(x|\theta)$&lt;/code&gt;，记对数似然函数为&lt;code&gt;$\ell(\theta|x):=\log p(x|\theta)$&lt;/code&gt;。与对数似然函数相关的有两个定义，score function和fisher information。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;定义1（score function）&lt;/strong&gt;：score function &lt;code&gt;$s(\theta|x)$&lt;/code&gt;被定义为对数似然函数关于参数&lt;code&gt;$\theta$&lt;/code&gt;的梯度&lt;/p&gt;
