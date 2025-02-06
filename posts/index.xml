@@ -11,8 +11,128 @@
     </image>
     <generator>Hugo -- 0.143.1</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 05 Feb 2025 00:00:41 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 05 Feb 2025 12:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>自然梯度（二）：黎曼距离下的最速下降</title>
+      <link>https://nil9.net/posts/natural-gradient-descent/</link>
+      <pubDate>Wed, 05 Feb 2025 12:00:41 +0000</pubDate>
+      <guid>https://nil9.net/posts/natural-gradient-descent/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://nil9.net/posts/fisher-info-matrix/&#34;&gt;上篇文章&lt;/a&gt;中，我们从Fisher信息矩阵（FIM）的定义出发，推导出Fisher矩阵与KL散度的关系，并建立如下结论：FIM可以作为概率模型的参数空间的一种黎曼度量。在本篇文章中，我们利用上篇得到的结论，推导自然梯度中为何引入FIM来修正梯度方向，并介绍自然梯度的一些性质。&lt;/p&gt;
+&lt;h1 id=&#34;梯度下降欧氏距离下的最速下降&#34;&gt;梯度下降：欧氏距离下的最速下降&lt;/h1&gt;
+&lt;p&gt;考虑一个最优化任务（&lt;code&gt;$f:\Theta\to\mathbb{R}$&lt;/code&gt;）：
+&lt;code&gt;$$ \underset{\theta}{\operatorname{min}} f(\theta) $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;最常见的一阶优化方法是梯度下降/steepest descent：
+&lt;code&gt;$$ \theta^+=\theta-\eta\nabla_\theta f $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;其中&lt;code&gt;$\eta$&lt;/code&gt;是学习率。这里的「steepest」指的是在约束欧氏距离定义下的步长在极小范围内时，选取梯度的负方向能最大化一步之内目标函数下降的程度。
+&lt;code&gt;$$ \lim_{\epsilon\to 0}\frac{1}{\epsilon}\left(\underset{\delta:\|\delta\|\le \epsilon}{\operatorname{argmin}}  f(\theta+\delta)\right)=-\frac{\nabla_\theta f}{\|\nabla_\theta f\|}\tag{1} $$&lt;/code&gt;&lt;/p&gt;
+&lt;style type=&#34;text/css&#34;&gt;
+     
+    .notice {
+        --title-color: #fff;
+        --title-background-color: #6be;
+        --content-color: #444;
+        --content-background-color: #e7f2fa;
+    }
+
+    .notice.proof {
+        --title-background-color: rgb(130, 130, 130);
+        --content-background-color: #f7f7f7;
+    }
+
+    .notice.info {
+        --title-background-color: #fb7;
+        --content-background-color: #fec;
+    }
+
+    .notice.tip {
+        --title-background-color: #5a5;
+        --content-background-color: #efe;
+    }
+
+    .notice.warning {
+        --title-background-color: #c33;
+        --content-background-color: #fee;
+    }
+
+     
+
+    body.dark .notice {
+        --title-color: #fff;
+        --title-background-color: #069;
+        --content-color: #ddd;
+        --content-background-color: #023;
+    }
+
+    body.dark .notice.proof {
+        --title-background-color: rgb(129, 129, 129);
+        --content-background-color: rgb(41, 41, 41);
+    }
+
+    body.dark .notice.info {
+        --title-background-color: #a50;
+        --content-background-color: #420;
+    }
+
+    body.dark .notice.tip {
+        --title-background-color: #363;
+        --content-background-color: #121;
+    }
+
+    body.dark .notice.warning {
+        --title-background-color: #800;
+        --content-background-color: #400;
+    }
+
+     
+    .notice {
+        padding: 18px;
+        line-height: 24px;
+        margin-bottom: 24px;
+        border-radius: 4px;
+        color: var(--content-color);
+        background: var(--content-background-color);
+    }
+
+    .notice p:last-child {
+        margin-bottom: 0
+    }
+
+     
+    .notice-title {
+        margin: -18px -18px 12px;
+        padding: 4px 18px;
+        border-radius: 4px 4px 0 0;
+        font-weight: 700;
+        color: var(--title-color);
+        background: var(--title-background-color);
+    }
+
+     
+    .icon-notice {
+        display: inline-flex;
+        align-self: center;
+        margin-right: 8px;
+    }
+
+    .icon-notice img,
+    .icon-notice svg {
+        height: 1em;
+        width: 1em;
+        fill: currentColor;
+    }
+
+    .icon-notice img,
+    .icon-notice.baseline svg {
+        top: .125em;
+        position: relative;
+    }
+&lt;/style&gt;&lt;div class=&#34;notice proof&#34; &gt;
+    &lt;p class=&#34;notice-title&#34;&gt;
+        &lt;span class=&#34;icon-notice baseline&#34;&gt;
+            
+        &lt;/span&gt;proof&lt;/p&gt;</description>
+    </item>
     <item>
       <title>自然梯度（一）：Fisher信息矩阵作为黎曼度量</title>
       <link>https://nil9.net/posts/fisher-info-matrix/</link>
