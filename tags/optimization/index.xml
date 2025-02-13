@@ -11,12 +11,12 @@
     </image>
     <generator>Hugo -- 0.143.1</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 05 Feb 2025 12:00:41 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 06 Feb 2025 12:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/tags/optimization/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>自然梯度（二）：黎曼距离下的最速下降</title>
       <link>https://nil9.net/posts/natural-gradient-descent/</link>
-      <pubDate>Wed, 05 Feb 2025 12:00:41 +0000</pubDate>
+      <pubDate>Thu, 06 Feb 2025 12:00:41 +0000</pubDate>
       <guid>https://nil9.net/posts/natural-gradient-descent/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://nil9.net/posts/fisher-info-matrix/&#34;&gt;上篇文章&lt;/a&gt;中，我们从Fisher信息矩阵（FIM）的定义出发，推导出Fisher矩阵与KL散度的关系，并建立如下结论：FIM可以作为概率模型的参数空间的一种黎曼度量。在本篇文章中，我们利用上篇得到的结论，推导自然梯度中为何引入FIM来修正梯度方向，并介绍自然梯度的一些性质。&lt;/p&gt;
 &lt;h1 id=&#34;梯度下降欧氏距离下的最速下降&#34;&gt;梯度下降：欧氏距离下的最速下降&lt;/h1&gt;

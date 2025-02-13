@@ -11,12 +11,25 @@
     </image>
     <generator>Hugo -- 0.143.1</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 05 Feb 2025 12:00:41 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 13 Feb 2025 00:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tensor Product Attention (TPA) 导读</title>
+      <link>https://nil9.net/posts/tensor-product-attention/</link>
+      <pubDate>Thu, 13 Feb 2025 00:00:41 +0000</pubDate>
+      <guid>https://nil9.net/posts/tensor-product-attention/</guid>
+      <description>&lt;p&gt;最近Deepseek比较出圈，连带着里面用到的MLA也被讨论得更多了。MLA无疑是一个非常出色的attention改进，但是由于它的KV cache设计，不能很好地兼容&lt;a href=&#34;https://kexue.fm/archives/8265&#34;&gt;RoPE&lt;/a&gt;，因此作者们使用了decoupled RoPE这样的「补丁」来引入位置关系，这无疑也增加了实现的复杂度。&lt;/p&gt;
+&lt;p&gt;最近，修改注意力KV Cache这一线工作又增添了&lt;a href=&#34;https://arxiv.org/pdf/2501.06425&#34;&gt;TPA&lt;/a&gt;这个新成员，笔者觉得这篇文章比较有趣，因此希望写一篇简短的导读。之所以叫「导读」，是因为本文不打算太深入文章的formulation和实验，而是从笔者自己的视角尝试降低一点TPA这个方法的理解成本。&lt;/p&gt;
+&lt;h1 id=&#34;mha的拆解&#34;&gt;MHA的拆解&lt;/h1&gt;
+&lt;p&gt;最标准的多头注意力（Vaswani的版本），大致可以拆解成3个步骤（这里默认讨论自注意力）&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：
+&lt;code&gt;$$ \begin{aligned} \text{step 1 }&amp;amp; \begin{cases} \boldsymbol{q}_i^{(h)} = \boldsymbol{x}_i\boldsymbol{W}_q^{(h)}\in\mathbb{R}^{d_k},\quad \boldsymbol{W}_q^{(h)}\in\mathbb{R}^{d\times d_k} \\  \boldsymbol{k}_i^{(h)} = \boldsymbol{x}_i\boldsymbol{W}_k^{(h)}\in\mathbb{R}^{d_k},\quad \boldsymbol{W}_k^{(h)}\in\mathbb{R}^{d\times d_k}\\  \boldsymbol{v}_i^{(h)} = \boldsymbol{x}_i\boldsymbol{W}_v^{(h)}\in\mathbb{R}^{d_v},\quad \boldsymbol{W}_v^{(h)}\in\mathbb{R}^{d\times d_v}  \end{cases} \\ \text{step 2 }&amp;amp; \begin{cases} \boldsymbol{o}_t^{(h)} = \text{Attention}\left(\boldsymbol{q}_t^{(h)}, \boldsymbol{k}_{\leq t}^{(h)}, \boldsymbol{v}_{\leq t}^{(h)}\right)\triangleq\frac{\sum_{i\leq t}\exp\left(\boldsymbol{q}_t^{(h)} \boldsymbol{k}_i^{(h)}{}^{\top}\right)\boldsymbol{v}_i^{(h)}}{\sum_{i\leq t}\exp\left(\boldsymbol{q}_t^{(h)} \boldsymbol{k}_i^{(h)}{}^{\top}\right)} \\  \end{cases} \\ \text{step 3 }&amp;amp; \begin{cases} \boldsymbol{o}_t = \left[\boldsymbol{o}_t^{(1)}, \boldsymbol{o}_t^{(2)}, \cdots, \boldsymbol{o}_t^{(H)}\right]  \end{cases} \\ \end{aligned}\\ $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里&lt;code&gt;$\boldsymbol{x}_1,\boldsymbol{x}_2,\cdots,\boldsymbol{x}_l$&lt;/code&gt;是输入向量，上标&lt;code&gt;$h\in \{1,\ldots,H\}$&lt;/code&gt;表示注意力头，&lt;code&gt;$d,d_k,d_v$&lt;/code&gt;分别表示输入维度、key维度、value维度。在第一步中，我们将每个token的表征独立地线性投射到不同的自空间上，第二步是标准的点积注意力，第三步是拼接（后续再做一步线性变换）。&lt;/p&gt;
+&lt;p&gt;我们重点来审视一下第一个步骤，这里由于每个token的表征是独立操作的（类似FFN），因此我们可以将每个token的表征看做一个样本点，这里做的事情就是将一个&lt;code&gt;$d$&lt;/code&gt;维度的向量，转化成3个矩阵&lt;code&gt;$\tilde{\boldsymbol{Q}}\in\mathbb{R}^{H\times d_k},\tilde{\boldsymbol{K}}\in\mathbb{R}^{H\times d_k},\tilde{\boldsymbol{V}}\in\mathbb{R}^{H\times d_v}$&lt;/code&gt;，每一个头对应这个矩阵中的一行。接着我们逐行计算每行对应的三组向量的点积注意力，就构成了标准的多头注意力。在标准实现中，这个变换是通过参数矩阵的线性变换+ reshape实现的。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>自然梯度（二）：黎曼距离下的最速下降</title>
       <link>https://nil9.net/posts/natural-gradient-descent/</link>
-      <pubDate>Wed, 05 Feb 2025 12:00:41 +0000</pubDate>
+      <pubDate>Thu, 06 Feb 2025 12:00:41 +0000</pubDate>
       <guid>https://nil9.net/posts/natural-gradient-descent/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://nil9.net/posts/fisher-info-matrix/&#34;&gt;上篇文章&lt;/a&gt;中，我们从Fisher信息矩阵（FIM）的定义出发，推导出Fisher矩阵与KL散度的关系，并建立如下结论：FIM可以作为概率模型的参数空间的一种黎曼度量。在本篇文章中，我们利用上篇得到的结论，推导自然梯度中为何引入FIM来修正梯度方向，并介绍自然梯度的一些性质。&lt;/p&gt;
 &lt;h1 id=&#34;梯度下降欧氏距离下的最速下降&#34;&gt;梯度下降：欧氏距离下的最速下降&lt;/h1&gt;
