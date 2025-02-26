@@ -18,7 +18,7 @@
       <link>https://nil9.net/posts/wd-model-precision/</link>
       <pubDate>Wed, 26 Feb 2025 00:00:41 +0000</pubDate>
       <guid>https://nil9.net/posts/wd-model-precision/</guid>
-      <description>&lt;p&gt;最近在阅读&lt;a href=&#34;https://github.com/MoonshotAI/Moonlight/blob/master/Moonlight.pdf&#34;&gt;Muon is Scalable for LLM Training&lt;/a&gt;这篇文章的时候注意到他们使用无权重衰减（weight decay）版本的Muon优化LLM的时候，优化器的收敛优势会随着训练过程逐渐消失，又看到&lt;a href=&#34;https://www.zhihu.com/people/xiao-ming-tong-xue-86-81&#34;&gt;@小明同学&lt;/a&gt;提到的一个细节，很多开源的LLM在技术报告中都提到了使用0.1作为权重衰减的系数，觉得是个比较有意思的发现。结合Kimi的文章中关于bf16的简单陈述，笔者在本文中稍微展开讲下，权重衰减对于LLM的低精度训练中有什么作用。&lt;/p&gt;
+      <description>&lt;p&gt;最近在阅读&lt;a href=&#34;https://github.com/MoonshotAI/Moonlight/blob/master/Moonlight.pdf&#34;&gt;Muon is Scalable for LLM Training&lt;/a&gt;这篇文章的时候注意到他们使用无权重衰减（weight decay）版本的Muon优化LLM的时候，优化器的收敛优势会随着训练过程逐渐消失，又看到&lt;a href=&#34;https://www.zhihu.com/people/xiao-ming-tong-xue-86-81&#34;&gt;@小明同学&lt;/a&gt;在评论区提到的一个细节，很多开源的LLM在技术报告中都提到了使用0.1作为权重衰减的系数，觉得是个比较有意思的发现。结合Kimi的文章中关于bf16的简单陈述，笔者在本文中稍微展开讲下，权重衰减对于LLM的低精度训练中有什么作用。&lt;/p&gt;
 &lt;p&gt;首先把结论放在前面：除了一般认知中的正则化作用，权重衰减也可能降低精度损失的风险——对于计算机的浮点数而言，&lt;strong&gt;绝对值越大，精度越低&lt;/strong&gt;。对于低精度/混合精度训练而言，使用权重衰减可以控制参数的绝对值范围，从而保证模型参数不落入低精度的数值区间。&lt;/p&gt;
 &lt;h1 id=&#34;浮点数的存储与精度&#34;&gt;浮点数的存储与精度&lt;/h1&gt;
 &lt;p&gt;上述结论主要与浮点数在计算机内的存储形式有关。学过计算机的一些基本课程的读者可能有印象，浮点数的存储是二进制的形式，分为符号位、指数位和尾数位三段。深度学习中常见的浮点数协议（fp32、fp16、bf16、tf32）的区别在于指数位和尾数位的比特数量不同。由于浮点数是一个「指数」的形式，&lt;strong&gt;因此它在实数空间的分布是不均匀的&lt;/strong&gt;。&lt;/p&gt;
