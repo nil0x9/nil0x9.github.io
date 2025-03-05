@@ -11,12 +11,12 @@
     </image>
     <generator>Hugo -- 0.145.0</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 02 Mar 2025 00:00:41 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 05 Mar 2025 00:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/tags/dl/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>从约束视角看深度学习优化若干新进展</title>
       <link>https://nil9.net/posts/gd-norm-const/</link>
-      <pubDate>Sun, 02 Mar 2025 00:00:41 +0000</pubDate>
+      <pubDate>Wed, 05 Mar 2025 00:00:41 +0000</pubDate>
       <guid>https://nil9.net/posts/gd-norm-const/</guid>
       <description>&lt;p&gt;在深度学习中最常用的优化方法是梯度下降方法及其变体。在过去很长一段时间中，Adam优化器是NLP社区的默认选择，在ViT出现之后，CV方面的工作也逐渐开始使用Adam和Adam的变体（在ViT之前，一种常见的观点是Adam不适用于Vision任务）。&lt;/p&gt;
 &lt;p&gt;最近Muon优化器在Kimi的新工作带动下又火了一把，相较于Adam优化器需要同时维护一阶、二阶矩估计量，Muon只需要维护一份梯度的动量估计，因此在大规模训练中有很大优势。最近笔者顺着Muon的reference看了Jeremy Bernstein在优化的一些文章，觉得很有意思，因此写这篇文章梳理一下这一系列工作的思路。本文的核心论点是：使用诱导范数来约束梯度更新，可以推导出最近的一些新出现的优化器，这也可能是未来深度学习优化的一个有潜力的探索方向。&lt;/p&gt;
