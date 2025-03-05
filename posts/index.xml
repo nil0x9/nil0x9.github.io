@@ -9,10 +9,36 @@
       <url>https://nil9.net/images/android-chrome-512x512.png</url>
       <link>https://nil9.net/images/android-chrome-512x512.png</link>
     </image>
-    <generator>Hugo -- 0.144.2</generator>
+    <generator>Hugo -- 0.145.0</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 26 Feb 2025 00:00:41 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 02 Mar 2025 00:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从约束视角看深度学习优化若干新进展</title>
+      <link>https://nil9.net/posts/gd-norm-const/</link>
+      <pubDate>Sun, 02 Mar 2025 00:00:41 +0000</pubDate>
+      <guid>https://nil9.net/posts/gd-norm-const/</guid>
+      <description>&lt;p&gt;在深度学习中最常用的优化方法是梯度下降方法及其变体。在过去很长一段时间中，Adam优化器是NLP社区的默认选择，在ViT出现之后，CV方面的工作也逐渐开始使用Adam和Adam的变体（在ViT之前，一种常见的观点是Adam不适用于Vision任务）。&lt;/p&gt;
+&lt;p&gt;最近Muon优化器在Kimi的新工作带动下又火了一把，相较于Adam优化器需要同时维护一阶、二阶矩估计量，Muon只需要维护一份梯度的动量估计，因此在大规模训练中有很大优势。最近笔者顺着Muon的reference看了Jeremy Bernstein在优化的一些文章，觉得很有意思，因此写这篇文章梳理一下这一系列工作的思路。本文的核心论点是：使用诱导范数来约束梯度更新，可以推导出最近的一些新出现的优化器，这也可能是未来深度学习优化的一个有潜力的探索方向。&lt;/p&gt;
+&lt;h1 id=&#34;梯度下降recap&#34;&gt;梯度下降（Recap）&lt;/h1&gt;
+&lt;p&gt;当前深度学习优化算法的基石是梯度下降。之前笔者写过一篇拙文（&lt;a href=&#34;https://nil9.net/posts/natural-gradient-descent/&#34;&gt;自然梯度（二）：黎曼距离下的最速下降&lt;/a&gt;）整理过梯度下降的推导，核心的结论是：当我们假设参数空间是一个欧几里得空间、参数的距离可以用欧几里得距离来衡量时，我们在某个点约束&lt;code&gt;$\|\Delta\theta\|_2\le\epsilon(\epsilon&amp;gt;0)$&lt;/code&gt;时，&lt;code&gt;$\Delta\theta$&lt;/code&gt;取梯度的反方向时可以让目标函数下降最多（具体的证明请参阅上述引文）。&lt;/p&gt;
+&lt;p&gt;使用梯度下降最大的问题是，它实际上&lt;strong&gt;忽略了模型的结构&lt;/strong&gt;。换句话说，梯度下降相当于将模型所有参数展平为1维向量，并且用向量2范数来衡量每次更新的「步长」。这种抽象是实用的，但是也存在一定的问题。两组参数有可能在欧几里得空间中距离很近，但是诱导的模型输出空间距离很远。造成的结果就是更新的方向实际上不是目标函数下降最快的方向。&lt;/p&gt;
+&lt;p&gt;这个问题要如何解决呢？在&lt;a href=&#34;https://nil9.net/posts/natural-gradient-descent/&#34;&gt;自然梯度（二）：黎曼距离下的最速下降&lt;/a&gt;中，我们介绍了自然梯度方法，即使用Fisher信息矩阵的逆作为梯度的pre-conditioner来矫正梯度下降的方向，从原理上是使用参数更新前后引导的概率分布的KL散度作为每次更新的步长约束。但是对于常见的深度神经网络来说，这样做仍然是不切实际的，因为FIM是一个&lt;code&gt;$N\times N$&lt;/code&gt;的大矩阵（其中&lt;code&gt;$N$&lt;/code&gt;是参数量），对于这么大的矩阵存储或求逆都是很难做到的。&lt;/p&gt;
+&lt;h1 id=&#34;诱导范数作为步长约束&#34;&gt;诱导范数作为步长约束&lt;/h1&gt;
+&lt;p&gt;是否有一种更「廉价」的方法，可以考虑&lt;strong&gt;模型的参数结构&lt;/strong&gt;，同时将&lt;strong&gt;参数的变化对于输出的影响&lt;/strong&gt;作为约束呢？&lt;/p&gt;
+&lt;p&gt;幸运的是，对于当下最流行的神经网络（e.g., Transformer）而言，模型往往可以拆解为很多小模块，其中最常见的是Linear模块（线性映射，这里忽略bias term）&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ f(\boldsymbol{x};\boldsymbol{W})=\boldsymbol{Wx},\ \boldsymbol{W}\in\mathbb{R}^{n\times m},\boldsymbol{x}\in \mathbb{R}^{m}\\ $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;在标准的Transformer中，Attention、FFN、LM分类器都是由Linear模块组成的，Embedding从数学原理上也是输入为one-hot encoding的线性映射。假设现在对于某个Linear模块的参数&lt;code&gt;$\boldsymbol{W}$&lt;/code&gt;做&lt;code&gt;$\Delta\boldsymbol{W}$&lt;/code&gt;的更新（&lt;code&gt;$\boldsymbol{W}&#39;\leftarrow \boldsymbol{W}+\Delta\boldsymbol{W}$&lt;/code&gt;），我们需要衡量这个更新对于最终输出的影响是多少（从而可以约束这个影响）。由于神经网络比较复杂，衡量&lt;code&gt;$\Delta\boldsymbol{W}$&lt;/code&gt;对于最终目标函数的影响是相对繁琐的，但我们可以退而求其次，衡量&lt;code&gt;$\Delta\boldsymbol{W}$&lt;/code&gt;对于这个Linear模块的输出&lt;code&gt;$\boldsymbol{Wx}$&lt;/code&gt;的影响。
+考虑线性模块的输入与输出空间的距离都使用欧几里得范数&lt;code&gt;$\|\cdot\|_{\ell_2}$&lt;/code&gt;衡量，那么这个约束可以通过如下不等式实现&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \|\Delta\boldsymbol{W}\boldsymbol{x}\|_{\ell_2} \le {\color[rgb]{0, 0.5, 0.8}{\|\Delta\boldsymbol{W}\|_{\ell_2\to\ell_2}}}\|\boldsymbol{x}\|_{\ell_2} $$&lt;/code&gt;
+这里的&lt;code&gt;${\color[rgb]{0, 0.5, 0.8}{\|\Delta\boldsymbol{W}\|_{\ell_2\to\ell_2}}}$&lt;/code&gt;是矩阵2范数。这个不等式告诉我们，如果约束了参数更新量的谱范数（不等式右侧），也就约束了更新前后这个线性模块输出的变化量。&lt;/p&gt;
+&lt;p&gt;假设现在需要优化的神经网络是由一系列的线性模块堆叠组成（e.g., MLP），我们可以参照梯度下降的推导构造如下的更新&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \underset{\Delta\boldsymbol{W}_1,\ldots,\Delta\boldsymbol{W}_L}{\text{arg min}}\left[ \sum_{l=1}^L {\langle \boldsymbol{G}_l, \Delta\boldsymbol{W}_l \rangle}_F + \frac{\lambda}{2}\max_{l=1}^L{\color[rgb]{0, 0.5, 0.8}{\|\Delta\boldsymbol{W}_l\|^2_{\ell_2\to\ell_2}}} \right]\\ $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里&lt;code&gt;$\boldsymbol{G}_l$&lt;/code&gt;表示&lt;code&gt;$\boldsymbol{W}_l$&lt;/code&gt;对应的梯度矩阵（布局与原参数矩阵相同），&lt;code&gt;${\langle \cdot, \cdot \rangle}_F$&lt;/code&gt;表示Frobenius内积（对矩阵而言，逐元素相乘求和）。这里之所以使用&lt;code&gt;$\max_{l=1}^L$&lt;/code&gt;（而不是直接求和），是因为我们引入这个约束时希望目标函数在&lt;code&gt;$\Delta\boldsymbol{W}_l$&lt;/code&gt;变化下，能够保持平滑的性质&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;，因此需要bound所有参数矩阵更新量的谱范数的最大值。&lt;/p&gt;
+&lt;p&gt;我们来逐步推导这个最小值成立时的&lt;code&gt;$\Delta\boldsymbol{W}_1,\ldots,\Delta\boldsymbol{W}_L$&lt;/code&gt;取值&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;。为了方便，把每个&lt;code&gt;$\Delta\boldsymbol{W}_l$&lt;/code&gt;拆解成大小和方向两部分：&lt;code&gt;$\Delta\boldsymbol{W}_l=c_l\boldsymbol{T}_l(c_l\triangleq\|\Delta\boldsymbol{W}_l\|_{\ell_2\to\ell_2})$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;（为了可读性，下面的&lt;code&gt;$\|\cdots\|$&lt;/code&gt;均表示谱范数&lt;code&gt;$\|\cdot\|_{\ell_2\to\ell_2}$&lt;/code&gt;）&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \begin{align} &amp;amp;\underset{\Delta\boldsymbol{W}_1,\ldots,\Delta\boldsymbol{W}_L}{\text{min}}\left[ \sum_{l=1}^L {\langle \boldsymbol{G}_l, \Delta\boldsymbol{W}_l \rangle}_F + \frac{\lambda}{2}\max_{l=1}^L\|\Delta\boldsymbol{W}_l\|^2 \right]\\ &amp;amp;=\underset{c_1,\ldots,c_L\ge 0}{\text{min}}\left[ \sum_{l=1}^L c_l\min_{\|\boldsymbol{T}_l\|=1}{\langle \boldsymbol{G}_l, \boldsymbol{T}_l \rangle}_F + \frac{\lambda}{2}\max_{l=1}^Lc_l^2 \right]\\ &amp;amp;=\underset{c_1,\ldots,c_L\ge 0}{\text{min}}\left[ -\sum_{l=1}^L c_l\max_{\|\boldsymbol{T}_l\|=1}{\langle \boldsymbol{G}_l, \boldsymbol{T}_l \rangle}_F + \frac{\lambda}{2}\max_{l=1}^Lc_l^2 \right]\\ &amp;amp;=\underset{c_1,\ldots,c_L\ge 0}{\text{min}}\left[ -\sum_{l=1}^L c_l \|\boldsymbol{G}_l\|_* + \frac{\lambda}{2}\max_{l=1}^Lc_l^2 \right]\quad\triangleright\|\cdot\|_*\text{表示核范数}\\ &amp;amp;=\underset{\eta\ge 0}{\text{min}}\left[ -\sum_{l=1}^L \eta\|\boldsymbol{G}_l\|_* + \frac{\lambda}{2}\max_{l=1}^L \eta^2 \right]\tag{1}\\ \end{align} $$&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
     <item>
       <title>为什么LLM一般使用较大的权重衰减系数？</title>
       <link>https://nil9.net/posts/wd-model-precision/</link>
