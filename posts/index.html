@@ -10,13 +10,13 @@ feature learning的谱条件 为什么需要使用谱范数来衡量参数的大
 $$ \|\boldsymbol{h}_\ell\|_2=\Theta(\sqrt{n_\ell})\text{ and } \|\Delta\boldsymbol{h}_\ell\|_2=\Theta(\sqrt{n_\ell}), \text{ for }\ell=1,\ldots,L-1\tag{1} $$
 这个条件意味着，对于中间的任何特征向量而言，每个元素平均下来的范数是常数阶的，一次更新后的变化量也是常数阶的（不会随着宽度$n_\ell$趋近无穷而爆炸或者弥散）。
 对于常见的由一系列矩阵参数构成的神经网络而言，实现这样的约束，需要对参数矩阵做如下的谱条件约束：
-$$ \|\boldsymbol{W}_\ell\|_2=\Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right)\text{ and } \|\Delta\boldsymbol{W}_\ell\|_2=\Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right), \text{ for }\ell=1,\ldots,L-1 $$
+$$ \|\boldsymbol{W}_\ell\|_2=\Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right)\text{ and } \|\Delta\boldsymbol{W}_\ell\|_2=\Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right), \text{ for }\ell=1,\ldots,L-1\tag{2} $$
 这里的$\|\cdot\|_2$是矩阵的谱范数，即从向量$\ell_2$空间映射到向量$\ell_2$空间的算子诱导范数
 $$ \|\boldsymbol{A}\|_2=\underset{\boldsymbol{x}\in\mathbb{R}^n}{\max} \frac{\|\boldsymbol{A}\boldsymbol{x}\|_2}{\|\boldsymbol{x}\|_2}\text{ for } \boldsymbol{A}\in\mathbb{R}^{m\times n} $$
 这个谱条件能够保证公式$(1)$成立，证明思路主要利用到谱范数的性质$\|\boldsymbol{Av}\|_2\le\|\boldsymbol{A}\|_2\|\boldsymbol{v}\|_2$，证明出上述谱条件诱导的$\|\boldsymbol{h}_\ell\|_2,\|\Delta\boldsymbol{h}_\ell\|_2$的上界均为$\Theta(\sqrt{n_\ell})$，接着证明这个上界依概率总是取得。具体可以看这篇论文的第三节（相比Greg的TP系列，还算是很容易理解的）。
-其中第二个条件是很直观的，对于SGD优化器而言，直接按照每个参数矩阵的维度设定对应的学习率即可
+公式$(2)$中的第二个条件是很直观的，对于SGD优化器而言，直接按照每个参数矩阵的维度设定对应的学习率即可
 $$ \eta_\ell = \Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right) $$
-但是对于第一个条件$\boldsymbol{W}_\ell = \Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right)$，需要修改初始化的方式，我们可以从一个标准正态分布中i.i.d.采样一个权重矩阵$\boldsymbol{W}'\in\mathbb{R}^{n_\ell\times n_{\ell-1}}$，接着做缩放$\boldsymbol{W} = \sigma\boldsymbol{W}'$（这里略去下标$\ell$）得到最终的初始化参数矩阵。
+对于第一个条件$\boldsymbol{W}_\ell = \Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right)$，需要修改初始化的方式——我们可以从一个标准正态分布中i.i.d.采样一个权重矩阵$\boldsymbol{W}'\in\mathbb{R}^{n_\ell\times n_{\ell-1}}$，接着做缩放$\boldsymbol{W} = \sigma\boldsymbol{W}'$（这里略去下标$\ell$）得到最终的初始化参数矩阵。
 这个$\sigma$怎么确定呢？由于矩阵的stable rank按定义可以将矩阵的谱范数和Frobenius范数联系起来： $$ \text{stable-rank}(\boldsymbol{W}) = \frac{\|\boldsymbol{W}\|_F^2}{\|\boldsymbol{W}\|_2^2} $$
 ...</p></div><footer class=entry-footer><span title='2025-03-31 00:00:41 +0000 UTC'>2025-03-31</span>&nbsp;·&nbsp;Tianyang Lin</footer><a class=entry-link aria-label="post link to 谱条件：如何衡量神经网络参数空间中的距离？" href=https://nil9.net/posts/spectral-condition/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>简记：Muon中设计Newton-Schulz迭代的系数？</h2></header><div class=entry-content><p>上篇文章介绍了Muon等新兴深度学习优化器背后的原理，即约束参数矩阵的诱导范数下得到新的更新方向。
 在Muon对参数更新方向$-\boldsymbol{U}\boldsymbol{V}^\top$的计算中用到了Newton-Schulz迭代方法，本质上是在寻找这样一个多项式函数 $$ f(x)=ax+bx^3+cx^5+\ldots $$

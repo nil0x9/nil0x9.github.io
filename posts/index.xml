@@ -34,13 +34,13 @@
 &lt;p&gt;&lt;code&gt;$$ \|\boldsymbol{h}_\ell\|_2=\Theta(\sqrt{n_\ell})\text{ and } \|\Delta\boldsymbol{h}_\ell\|_2=\Theta(\sqrt{n_\ell}), \text{ for }\ell=1,\ldots,L-1\tag{1} $$&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;这个条件意味着，对于中间的任何特征向量而言，每个元素平均下来的范数是常数阶的，一次更新后的变化量也是常数阶的（不会随着宽度&lt;code&gt;$n_\ell$&lt;/code&gt;趋近无穷而爆炸或者弥散）。&lt;/p&gt;
 &lt;p&gt;对于常见的由一系列矩阵参数构成的神经网络而言，实现这样的约束，需要对参数矩阵做如下的谱条件约束：&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;$$ \|\boldsymbol{W}_\ell\|_2=\Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right)\text{ and } \|\Delta\boldsymbol{W}_\ell\|_2=\Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right), \text{ for }\ell=1,\ldots,L-1 $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \|\boldsymbol{W}_\ell\|_2=\Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right)\text{ and } \|\Delta\boldsymbol{W}_\ell\|_2=\Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right), \text{ for }\ell=1,\ldots,L-1\tag{2} $$&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;这里的&lt;code&gt;$\|\cdot\|_2$&lt;/code&gt;是矩阵的谱范数，即从向量&lt;code&gt;$\ell_2$&lt;/code&gt;空间映射到向量&lt;code&gt;$\ell_2$&lt;/code&gt;空间的算子诱导范数&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;$$ \|\boldsymbol{A}\|_2=\underset{\boldsymbol{x}\in\mathbb{R}^n}{\max} \frac{\|\boldsymbol{A}\boldsymbol{x}\|_2}{\|\boldsymbol{x}\|_2}\text{ for } \boldsymbol{A}\in\mathbb{R}^{m\times n} $$&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;这个谱条件能够保证公式&lt;code&gt;$(1)$&lt;/code&gt;成立，证明思路主要利用到谱范数的性质&lt;code&gt;$\|\boldsymbol{Av}\|_2\le\|\boldsymbol{A}\|_2\|\boldsymbol{v}\|_2$&lt;/code&gt;，证明出上述谱条件诱导的&lt;code&gt;$\|\boldsymbol{h}_\ell\|_2,\|\Delta\boldsymbol{h}_\ell\|_2$&lt;/code&gt;的上界均为&lt;code&gt;$\Theta(\sqrt{n_\ell})$&lt;/code&gt;，接着证明这个上界依概率总是取得。具体可以看&lt;a href=&#34;http://arxiv.org/abs/2310.17813&#34;&gt;这篇论文&lt;/a&gt;的第三节（相比Greg的TP系列，还算是很容易理解的）。&lt;/p&gt;
-&lt;p&gt;其中第二个条件是很直观的，对于SGD优化器而言，直接按照每个参数矩阵的维度设定对应的学习率即可&lt;/p&gt;
+&lt;p&gt;公式&lt;code&gt;$(2)$&lt;/code&gt;中的第二个条件是很直观的，对于SGD优化器而言，直接按照每个参数矩阵的维度设定对应的学习率即可&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;$$ \eta_\ell = \Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right) $$&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;但是对于第一个条件&lt;code&gt;$\boldsymbol{W}_\ell = \Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right)$&lt;/code&gt;，需要修改初始化的方式，我们可以从一个标准正态分布中i.i.d.采样一个权重矩阵&lt;code&gt;$\boldsymbol{W}&#39;\in\mathbb{R}^{n_\ell\times n_{\ell-1}}$&lt;/code&gt;，接着做缩放&lt;code&gt;$\boldsymbol{W} = \sigma\boldsymbol{W}&#39;$&lt;/code&gt;（这里略去下标&lt;code&gt;$\ell$&lt;/code&gt;）得到最终的初始化参数矩阵。&lt;/p&gt;
+&lt;p&gt;对于第一个条件&lt;code&gt;$\boldsymbol{W}_\ell = \Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right)$&lt;/code&gt;，需要修改初始化的方式——我们可以从一个标准正态分布中i.i.d.采样一个权重矩阵&lt;code&gt;$\boldsymbol{W}&#39;\in\mathbb{R}^{n_\ell\times n_{\ell-1}}$&lt;/code&gt;，接着做缩放&lt;code&gt;$\boldsymbol{W} = \sigma\boldsymbol{W}&#39;$&lt;/code&gt;（这里略去下标&lt;code&gt;$\ell$&lt;/code&gt;）得到最终的初始化参数矩阵。&lt;/p&gt;
 &lt;p&gt;这个&lt;code&gt;$\sigma$&lt;/code&gt;怎么确定呢？由于矩阵的stable rank按定义可以将矩阵的谱范数和Frobenius范数联系起来：
 &lt;code&gt;$$ \text{stable-rank}(\boldsymbol{W}) = \frac{\|\boldsymbol{W}\|_F^2}{\|\boldsymbol{W}\|_2^2} $$&lt;/code&gt;&lt;/p&gt;</description>
     </item>
