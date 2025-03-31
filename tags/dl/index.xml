@@ -11,8 +11,39 @@
     </image>
     <generator>Hugo -- 0.145.0</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 08 Mar 2025 00:00:41 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 31 Mar 2025 00:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/tags/dl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>谱条件：如何衡量神经网络参数空间中的距离？</title>
+      <link>https://nil9.net/posts/spectral-condition/</link>
+      <pubDate>Mon, 31 Mar 2025 00:00:41 +0000</pubDate>
+      <guid>https://nil9.net/posts/spectral-condition/</guid>
+      <description>&lt;h1 id=&#34;prologue&#34;&gt;Prologue&lt;/h1&gt;
+&lt;p&gt;如何衡量神经网络参数空间中的距离（i.e., 选取合适的范数）？这个问题我们之前已经在&lt;a href=&#34;https://nil9.net/posts/gd-norm-const/&#34;&gt;这篇文章&lt;/a&gt;中有所涉及，本文是更完整的拓展。&lt;/p&gt;
+&lt;p&gt;首先应该明确为什么这个问题很重要？因为在梯度下降这样的优化算法框架下，总是依赖目标参数的某种距离的衡量。例如，当目标参数可以对应到欧几里得空间的坐标时，就可以得到局部目标函数下降最快的方向是梯度负方向。&lt;/p&gt;
+&lt;p&gt;尽管在深度学习优化中，直接使用欧几里得范数（衡量参数空间的距离）非常吸引人，并且实际上也有效。但是，&lt;em&gt;&lt;strong&gt;这种做法会丢失结构信息&lt;/strong&gt;&lt;/em&gt;，因为它实质上是将参数看做一个扁平的向量。那么得到的优化方向就可能是相对低效的。&lt;/p&gt;
+&lt;p&gt;对于常见的神经网络而言，对参数矩阵使用谱范数似乎是个更好的选择[1][2]。使用谱范数的相关约束，可以引出在现在的大规模模型训练中非常重要的两个工作：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;$\mu P$&lt;/code&gt; (Maximal Update Parameterization)：使用特定的初始化与学习率的参数化，可以做到在小模型上调节部分超参数，迁移到同构的大模型。&lt;/li&gt;
+&lt;li&gt;Muon优化器的更新规则，即对梯度矩阵做SVD分解，消除奇异值矩阵后将&lt;code&gt;$-\boldsymbol{U}\boldsymbol{V}^\top$&lt;/code&gt;作为对应参数的更新方向。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;从而涵盖了给定神经网络结构下的参数初始化、参数更新的步长和方向三个方面（模型成功训练的三个基本要素）。&lt;/p&gt;
+&lt;h1 id=&#34;feature-learning的谱条件&#34;&gt;feature learning的谱条件&lt;/h1&gt;
+&lt;p&gt;为什么需要使用谱范数来衡量参数的大小和参数更新步长呢？在Greg Yang的系列工作中，考虑的主要是feature learning的问题。Yang在他的TP4中发现，在标准参数化或者NTK参数化的设定下，无穷宽的神经网络没有办法学习特征（一次更新后特征与初始化状态无异），这就与传统的linear transfer learning的智慧形成了悖论，因为如果没有feature learning，那么预训练就对后续的transfer没有任何增益。&lt;/p&gt;
+&lt;p&gt;于是为了达成非平凡的feature learning，就需要对神经网络的特征&lt;code&gt;$\boldsymbol{h}_\ell(\boldsymbol{x})\in\mathbb{R}^{n_\ell}$&lt;/code&gt;的范数与一步更新的特征范数变化量&lt;code&gt;$\boldsymbol{h}_\ell(\boldsymbol{x})$&lt;/code&gt;做如下的约束[1]：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \|\boldsymbol{h}_\ell\|_2=\Theta(\sqrt{n_\ell})\text{ and } \|\Delta\boldsymbol{h}_\ell\|_2=\Theta(\sqrt{n_\ell}), \text{ for }\ell=1,\ldots,L-1\tag{1} $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这个条件意味着，对于中间的任何特征向量而言，每个元素平均下来的范数是常数阶的，一次更新后的变化量也是常数阶的（不会随着宽度&lt;code&gt;$n_\ell$&lt;/code&gt;趋近无穷而爆炸或者弥散）。&lt;/p&gt;
+&lt;p&gt;对于常见的由一系列矩阵参数构成的神经网络而言，实现这样的约束，需要对参数矩阵做如下的谱条件约束：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \|\boldsymbol{W}_\ell\|_2=\Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right)\text{ and } \|\Delta\boldsymbol{W}_\ell\|_2=\Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right), \text{ for }\ell=1,\ldots,L-1 $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里的&lt;code&gt;$\|\cdot\|_2$&lt;/code&gt;是矩阵的谱范数，即从向量&lt;code&gt;$\ell_2$&lt;/code&gt;空间映射到向量&lt;code&gt;$\ell_2$&lt;/code&gt;空间的算子诱导范数&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \|\boldsymbol{A}\|_2=\underset{\boldsymbol{x}\in\mathbb{R}^n}{\max} \frac{\|\boldsymbol{A}\boldsymbol{x}\|_2}{\|\boldsymbol{x}\|_2}\text{ for } \boldsymbol{A}\in\mathbb{R}^{m\times n} $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这个谱条件能够保证公式&lt;code&gt;$(1)$&lt;/code&gt;成立，证明思路主要利用到谱范数的性质&lt;code&gt;$\|\boldsymbol{Av}\|_2\le\|\boldsymbol{A}\|_2\|\boldsymbol{v}\|_2$&lt;/code&gt;，证明出上述谱条件诱导的&lt;code&gt;$\|\boldsymbol{h}_\ell\|_2,\|\Delta\boldsymbol{h}_\ell\|_2$&lt;/code&gt;的上界均为&lt;code&gt;$\Theta(\sqrt{n_\ell})$&lt;/code&gt;，接着证明这个上界依概率总是取得。具体可以看&lt;a href=&#34;http://arxiv.org/abs/2310.17813&#34;&gt;这篇论文&lt;/a&gt;的第三节（相比Greg的TP系列，还算是很容易理解的）。&lt;/p&gt;
+&lt;p&gt;其中第二个条件是很直观的，对于SGD优化器而言，直接按照每个参数矩阵的维度设定对应的学习率即可&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \eta_\ell = \Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right) $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;但是对于第一个条件&lt;code&gt;$\boldsymbol{W}_\ell = \Theta\left(\sqrt{\frac{n_\ell}{n_{\ell-1}}}\right)$&lt;/code&gt;，需要修改初始化的方式，我们可以从一个标准正态分布中i.i.d.采样一个权重矩阵&lt;code&gt;$\boldsymbol{W}&#39;\in\mathbb{R}^{n_\ell\times n_{\ell-1}}$&lt;/code&gt;，接着做缩放&lt;code&gt;$\boldsymbol{W} = \sigma\boldsymbol{W}&#39;$&lt;/code&gt;（这里略去下标&lt;code&gt;$\ell$&lt;/code&gt;）得到最终的初始化参数矩阵。&lt;/p&gt;
+&lt;p&gt;这个&lt;code&gt;$\sigma$&lt;/code&gt;怎么确定呢？由于矩阵的stable rank按定义可以将矩阵的谱范数和Frobenius范数联系起来：
+&lt;code&gt;$$ \text{stable-rank}(\boldsymbol{W}) = \frac{\|\boldsymbol{W}\|_F^2}{\|\boldsymbol{W}\|_2^2} $$&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
     <item>
       <title>简记：Muon中设计Newton-Schulz迭代的系数？</title>
       <link>https://nil9.net/posts/newton-schulz-4muon/</link>
