@@ -11,8 +11,36 @@
     </image>
     <generator>Hugo -- 0.145.0</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 31 Mar 2025 00:00:41 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 25 Apr 2025 00:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>自定义CUDA kernel加速Muon优化器</title>
+      <link>https://nil9.net/posts/flash-muon/</link>
+      <pubDate>Fri, 25 Apr 2025 00:00:41 +0000</pubDate>
+      <guid>https://nil9.net/posts/flash-muon/</guid>
+      <description>&lt;h1 id=&#34;tldr&#34;&gt;TL;DR&lt;/h1&gt;
+&lt;p&gt;笔者通过自定义&lt;code&gt;$XX^\top$&lt;/code&gt;算子，加速Muon优化器中的核心操作——Newton-Schulz迭代，算子单测在8192维度上相比原生实现计算时间降低约一半，端到端的Newton-Schulz迭代运行时间降低至原来的0.71倍。相关代码已经发布在：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/nil0x9/flash-muon&#34;&gt;https://github.com/nil0x9/flash-muon&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;读者可以通过如下方式来试用优化版本的Muon实现或者核心的CUDA算子。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone --recurse-submodules https://github.com/nil0x9/flash-muon.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install -e ./
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;具体做法&#34;&gt;具体做法&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://kellerjordan.github.io/posts/muon/&#34;&gt;Muon优化器&lt;/a&gt;的核心机制是通过Newton-Schulz迭代法来代替SVD分解，实现GPU友好的&lt;code&gt;$\boldsymbol{U}\boldsymbol{V}^T$&lt;/code&gt;计算（之前笔者写过&lt;a href=&#34;https://zhuanlan.zhihu.com/p/28236539668&#34;&gt;这篇blog&lt;/a&gt;介绍Muon背后的数学原理）。&lt;/p&gt;
+&lt;p&gt;Newton-Schulz迭代法的核心公式如下所示，通过指定合适的多项式系数&lt;code&gt;$a,b,c$&lt;/code&gt;，将SVD分解的 &lt;code&gt;$\boldsymbol{U}\boldsymbol{\Sigma}\boldsymbol{V}^T$&lt;/code&gt;中的&lt;code&gt;$\boldsymbol{\Sigma}$&lt;/code&gt;在迭代中消除
+&lt;code&gt;$$ \boldsymbol{X}\leftarrow a\boldsymbol{X} + b(\boldsymbol{X}\boldsymbol{X}^\top)\boldsymbol{X} + c(\boldsymbol{X}\boldsymbol{X}^\top)(\boldsymbol{X}\boldsymbol{X}^\top)\boldsymbol{X} $$&lt;/code&gt;
+其中&lt;code&gt;$\boldsymbol{X}$&lt;/code&gt;是梯度矩阵或梯度的动量矩阵。在&lt;a href=&#34;https://github.com/KellerJordan/Muon/tree/master&#34;&gt;Jordan的实现&lt;/a&gt; 中这个迭代过程由如下的PyTorch代码实现：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(steps):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    A &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; X &lt;span style=&#34;color:#f92672&#34;&gt;@&lt;/span&gt; X&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;T
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    B &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; A &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; c &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; A &lt;span style=&#34;color:#f92672&#34;&gt;@&lt;/span&gt; A
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    X &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; a &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; X &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; B &lt;span style=&#34;color:#f92672&#34;&gt;@&lt;/span&gt; X
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意到这里提前计算了&lt;code&gt;$\boldsymbol{A}=\boldsymbol{X}\boldsymbol{X}^\top$&lt;/code&gt;来减少重复计算。由于&lt;code&gt;$\boldsymbol{A}$&lt;/code&gt;是一个对称矩阵，则循环内第二行的&lt;code&gt;$\boldsymbol{AA} = \boldsymbol{AA}^\top$&lt;/code&gt;。这里我们可以看到一个被使用了两次的运算&lt;code&gt;lambda x: matmul(x, x.T)&lt;/code&gt;，如果这个算子可以有比&lt;code&gt;matmul&lt;/code&gt;更高效的实现，就可以实现更快的Newton-Schulz迭代。&lt;/p&gt;
+&lt;p&gt;幸运的是&lt;code&gt;$\boldsymbol{X}\boldsymbol{X}^\top$&lt;/code&gt;是一个对称矩阵，理论上我们可以只计算上三角部分，下三角部分可以直接复用下三角部分的结果。&lt;/p&gt;
+&lt;p&gt;这一点在Laker Newhouse的这篇&lt;a href=&#34;https://www.lakernewhouse.com/assets/writing/faster-symmul-with-thunderkittens.pdf&#34;&gt;文章&lt;/a&gt;中有提及，但是可惜的是，他们并没有实现一个可用的kernel版本。&lt;/p&gt;
+&lt;p&gt;笔者沿着这个思路实现了一个可用的CUDA kernel。它的设计思路其实非常直观（也可能比较clumsy，欢迎批评指正）——在一般的GEMM算子中，每个线程会从全局内存load计算一定分块的矩阵算元到自己的寄存器内，在计算完对应分块的结果矩阵后，将这部分的结果store到输出算元对应的全局内存空间。GEMM的相关分析教程实在是太多了，笔者就不赘述了。——而对于&lt;code&gt;$\boldsymbol{X}\boldsymbol{X}^\top$&lt;/code&gt;这种对称运算，笔者的让下三角对应的线程块在kernel一开始直接退出，&lt;!-- raw HTML omitted --&gt;上三角部分的线程在计算结束后做完一般的store操作后，根据线程和线程块的id，找到对应的上三角部分的全局内存空间，将当前线程对应的结果分块转置后store到上三角的分块&lt;!-- raw HTML omitted --&gt;。
+用图像表达如下：&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+  &lt;img alt=&#34;design of matmul_transpose kernel&#34; loading=&#34;lazy&#34; src=&#34;https://nil9.net/images/flash-muon/matmul_transpose_kernel.png&#34; title=&#34;matmul_transpose的kernel设计&#34;&gt;&lt;figcaption class=&#34;image-caption&#34;&gt;matmul_transpose的kernel设计&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;</description>
+    </item>
     <item>
       <title>谱条件：如何衡量神经网络参数空间中的距离？</title>
       <link>https://nil9.net/posts/spectral-condition/</link>
