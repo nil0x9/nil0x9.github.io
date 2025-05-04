@@ -21,7 +21,7 @@
       <description>&lt;h1 id=&#34;tldr&#34;&gt;TL;DR&lt;/h1&gt;
 &lt;p&gt;笔者通过自定义&lt;code&gt;$XX^\top$&lt;/code&gt;算子，加速Muon优化器中的核心操作——Newton-Schulz迭代，算子单测在8192维度上相比原生实现计算时间降低约一半，端到端的Newton-Schulz迭代运行时间降低至原来的0.71倍。相关代码已经发布在：&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/nil0x9/flash-muon&#34;&gt;https://github.com/nil0x9/flash-muon&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;读者可以通过如下方式来试用优化版本的Muon实现或者核心的CUDA算子。&lt;/p&gt;
+&lt;p&gt;读者可以通过如下方式来试用优化版本的Muon实现或者核心算子。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone --recurse-submodules https://github.com/nil0x9/flash-muon.git
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install -e ./
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;具体做法&#34;&gt;具体做法&lt;/h1&gt;
