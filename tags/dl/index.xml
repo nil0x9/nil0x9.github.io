@@ -23,9 +23,9 @@
 &lt;p&gt;&lt;a href=&#34;https://www.zhihu.com/question/339723385/answer/782509914&#34;&gt;transformer中的attention为什么scaled? - Nil-9的回答&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;当时笔者沿着&lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;Vaswani 2017.&lt;/a&gt;的一个脚注，展开写了这样一篇回答，其数学原理并不复杂，浓缩版本是这样的：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;假设&lt;code&gt;$\boldsymbol{q}$&lt;/code&gt;,&lt;code&gt;$\boldsymbol{k}\in\mathbb{R}^{d_k}$&lt;/code&gt;是&lt;strong&gt;相互独立&lt;/strong&gt;的随机变量，均值和方差分别是0、1，则点积&lt;code&gt;$\langle\boldsymbol{q},\boldsymbol{k}\rangle$&lt;/code&gt;的量级是&lt;code&gt;$\Theta(\sqrt{d_k})$&lt;/code&gt;。为了防止点积过大导致softmax出现梯度消失问题，因此需要再点积基础上乘上&lt;code&gt;$1/\sqrt{d_k}$&lt;/code&gt;，将点积稳定在&lt;code&gt;$\Theta(1)$&lt;/code&gt;量级。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;假设&lt;code&gt;$\boldsymbol{q}$&lt;/code&gt;,&lt;code&gt;$\boldsymbol{k}\in\mathbb{R}^{d_k}$&lt;/code&gt;的每个分量均是是独立采样的随机变量，均值和方差分别是0、1，&lt;code&gt;$\forall i$&lt;/code&gt;满足分量&lt;code&gt;$q_i,k_i$&lt;/code&gt;互相独立，则点积&lt;code&gt;$\langle\boldsymbol{q},\boldsymbol{k}\rangle$&lt;/code&gt;的量级是&lt;code&gt;$\Theta(\sqrt{d_k})$&lt;/code&gt;。为了防止点积过大导致softmax出现梯度消失问题，因此需要再点积基础上乘上&lt;code&gt;$1/\sqrt{d_k}$&lt;/code&gt;，将点积稳定在&lt;code&gt;$\Theta(1)$&lt;/code&gt;量级。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;这个问题后来也成为了某些公司的所谓「机器学习八股文」之一。但这个放缩是不是严谨的呢？我们来仔细思考一下。&lt;/p&gt;
-&lt;p&gt;这里比较成问题的是「相互独立」的假设。我们先建立如下的基本的结论。&lt;/p&gt;
+&lt;p&gt;这里比较成问题的是「互相独立」的假设。我们先建立如下的基本的结论。&lt;/p&gt;
 &lt;p&gt;假设&lt;code&gt;$X,Y$&lt;/code&gt;是两个随机变量，已知：
 &lt;code&gt;$$ \mathbb{E}[X]= \mathbb{E}[Y] = 0\\ \text{Var}[X]=\text{Var}[Y] = 1 $$&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;那么乘积&lt;code&gt;$XY$&lt;/code&gt;满足：

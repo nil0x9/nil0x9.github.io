@@ -8,9 +8,9 @@
 我不禁回想起很多年前在知乎的一个问题：
 transformer中的attention为什么scaled? - Nil-9的回答
 当时笔者沿着Vaswani 2017.的一个脚注，展开写了这样一篇回答，其数学原理并不复杂，浓缩版本是这样的：
-假设$\boldsymbol{q}$,$\boldsymbol{k}\in\mathbb{R}^{d_k}$是相互独立的随机变量，均值和方差分别是0、1，则点积$\langle\boldsymbol{q},\boldsymbol{k}\rangle$的量级是$\Theta(\sqrt{d_k})$。为了防止点积过大导致softmax出现梯度消失问题，因此需要再点积基础上乘上$1/\sqrt{d_k}$，将点积稳定在$\Theta(1)$量级。
+假设$\boldsymbol{q}$,$\boldsymbol{k}\in\mathbb{R}^{d_k}$的每个分量均是是独立采样的随机变量，均值和方差分别是0、1，$\forall i$满足分量$q_i,k_i$互相独立，则点积$\langle\boldsymbol{q},\boldsymbol{k}\rangle$的量级是$\Theta(\sqrt{d_k})$。为了防止点积过大导致softmax出现梯度消失问题，因此需要再点积基础上乘上$1/\sqrt{d_k}$，将点积稳定在$\Theta(1)$量级。
 这个问题后来也成为了某些公司的所谓「机器学习八股文」之一。但这个放缩是不是严谨的呢？我们来仔细思考一下。
-这里比较成问题的是「相互独立」的假设。我们先建立如下的基本的结论。
+这里比较成问题的是「互相独立」的假设。我们先建立如下的基本的结论。
 假设$X,Y$是两个随机变量，已知： $$ \mathbb{E}[X]= \mathbb{E}[Y] = 0\\ \text{Var}[X]=\text{Var}[Y] = 1 $$
 那么乘积$XY$满足： $$ \mathbb{E}[XY]= \rho $$ 如果进一步地，$X,Y$均为正态分布随机变量，则有 $$ \text{Var}[XY]= 1 + \rho^2 $$ 其中$\rho$是$X$和$Y$的相关系数。
 proof
