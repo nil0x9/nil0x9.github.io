@@ -11,8 +11,135 @@
     </image>
     <generator>Hugo -- 0.145.0</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 25 Apr 2025 00:00:41 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 22 May 2025 00:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>简记：Attention Logits究竟如何放缩？</title>
+      <link>https://nil9.net/posts/attn-logits-scale/</link>
+      <pubDate>Thu, 22 May 2025 00:00:41 +0000</pubDate>
+      <guid>https://nil9.net/posts/attn-logits-scale/</guid>
+      <description>&lt;p&gt;最近在细读Tensor Programs的时候，发现一个有意思的细节，&lt;a href=&#34;https://arxiv.org/abs/2203.03466&#34;&gt;Greg 2022.&lt;/a&gt;在将mup应用到Transformer的时候，对Attention Logits使用&lt;code&gt;$1/d_k$&lt;/code&gt;进行放缩，而不是传统上的&lt;code&gt;$1/\sqrt{d_k}$&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;我不禁回想起很多年前在知乎的一个问题：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.zhihu.com/question/339723385/answer/782509914&#34;&gt;transformer中的attention为什么scaled? - Nil-9的回答&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;当时笔者沿着&lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;Vaswani 2017.&lt;/a&gt;的一个脚注，展开写了这样一篇回答，其数学原理并不复杂，浓缩版本是这样的：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;假设&lt;code&gt;$\boldsymbol{q}$&lt;/code&gt;,&lt;code&gt;$\boldsymbol{k}\in\mathbb{R}^{d_k}$&lt;/code&gt;是&lt;strong&gt;相互独立&lt;/strong&gt;的随机变量，均值和方差分别是0、1，则点积&lt;code&gt;$\langle\boldsymbol{q},\boldsymbol{k}\rangle$&lt;/code&gt;的量级是&lt;code&gt;$\Theta(\sqrt{d_k})$&lt;/code&gt;。为了防止点积过大导致softmax出现梯度消失问题，因此需要再点积基础上乘上&lt;code&gt;$1/\sqrt{d_k}$&lt;/code&gt;，将点积稳定在&lt;code&gt;$\Theta(1)$&lt;/code&gt;量级。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;这个问题后来也成为了某些公司的所谓「机器学习八股文」之一。但这个放缩是不是严谨的呢？我们来仔细思考一下。&lt;/p&gt;
+&lt;p&gt;这里比较成问题的是「相互独立」的假设。我们先建立如下的基本的结论。&lt;/p&gt;
+&lt;p&gt;假设&lt;code&gt;$X,Y$&lt;/code&gt;是两个随机变量，已知：
+&lt;code&gt;$$ \mathbb{E}[X]= \mathbb{E}[Y] = 0\\ \text{Var}[X]=\text{Var}[Y] = 1 $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;那么乘积&lt;code&gt;$XY$&lt;/code&gt;满足：
+&lt;code&gt;$$ \mathbb{E}[XY]= \rho $$&lt;/code&gt;
+如果进一步地，&lt;code&gt;$X,Y$&lt;/code&gt;均为正态分布随机变量，则有
+&lt;code&gt;$$ \text{Var}[XY]= 1 + \rho^2 $$&lt;/code&gt;
+其中&lt;code&gt;$\rho$&lt;/code&gt;是&lt;code&gt;$X$&lt;/code&gt;和&lt;code&gt;$Y$&lt;/code&gt;的相关系数。&lt;/p&gt;
+&lt;style type=&#34;text/css&#34;&gt;
+     
+    .notice {
+        --title-color: #fff;
+        --title-background-color: #6be;
+        --content-color: #444;
+        --content-background-color: #e7f2fa;
+    }
+
+    .notice.proof {
+        --title-background-color: rgb(130, 130, 130);
+        --content-background-color: #f7f7f7;
+    }
+
+    .notice.info {
+        --title-background-color: #fb7;
+        --content-background-color: #fec;
+    }
+
+    .notice.tip {
+        --title-background-color: #5a5;
+        --content-background-color: #efe;
+    }
+
+    .notice.warning {
+        --title-background-color: #c33;
+        --content-background-color: #fee;
+    }
+
+     
+
+    body.dark .notice {
+        --title-color: #fff;
+        --title-background-color: #069;
+        --content-color: #ddd;
+        --content-background-color: #023;
+    }
+
+    body.dark .notice.proof {
+        --title-background-color: rgb(129, 129, 129);
+        --content-background-color: rgb(41, 41, 41);
+    }
+
+    body.dark .notice.info {
+        --title-background-color: #a50;
+        --content-background-color: #420;
+    }
+
+    body.dark .notice.tip {
+        --title-background-color: #363;
+        --content-background-color: #121;
+    }
+
+    body.dark .notice.warning {
+        --title-background-color: #800;
+        --content-background-color: #400;
+    }
+
+     
+    .notice {
+        padding: 18px;
+        line-height: 24px;
+        margin-bottom: 24px;
+        border-radius: 4px;
+        color: var(--content-color);
+        background: var(--content-background-color);
+    }
+
+    .notice p:last-child {
+        margin-bottom: 0
+    }
+
+     
+    .notice-title {
+        margin: -18px -18px 12px;
+        padding: 4px 18px;
+        border-radius: 4px 4px 0 0;
+        font-weight: 700;
+        color: var(--title-color);
+        background: var(--title-background-color);
+    }
+
+     
+    .icon-notice {
+        display: inline-flex;
+        align-self: center;
+        margin-right: 8px;
+    }
+
+    .icon-notice img,
+    .icon-notice svg {
+        height: 1em;
+        width: 1em;
+        fill: currentColor;
+    }
+
+    .icon-notice img,
+    .icon-notice.baseline svg {
+        top: .125em;
+        position: relative;
+    }
+&lt;/style&gt;&lt;div class=&#34;notice proof&#34; &gt;
+    &lt;p class=&#34;notice-title&#34;&gt;
+        &lt;span class=&#34;icon-notice baseline&#34;&gt;
+            
+        &lt;/span&gt;proof&lt;/p&gt;</description>
+    </item>
     <item>
       <title>自定义CUDA kernel加速Muon优化器</title>
       <link>https://nil9.net/posts/flash-muon/</link>
