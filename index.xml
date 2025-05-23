@@ -18,7 +18,7 @@
       <link>https://nil9.net/posts/attn-logits-scale/</link>
       <pubDate>Thu, 22 May 2025 00:00:41 +0000</pubDate>
       <guid>https://nil9.net/posts/attn-logits-scale/</guid>
-      <description>&lt;p&gt;最近在细读Tensor Programs的时候，发现一个有意思的细节，&lt;a href=&#34;https://arxiv.org/abs/2203.03466&#34;&gt;Greg 2022.&lt;/a&gt;在将mup应用到Transformer的时候，对Attention Logits使用&lt;code&gt;$1/d_k$&lt;/code&gt;进行放缩，而不是传统上的&lt;code&gt;$1/\sqrt{d_k}$&lt;/code&gt;。&lt;/p&gt;
+      <description>&lt;p&gt;最近在细读Tensor Programs的时候，发现一个有意思的细节，&lt;a href=&#34;https://arxiv.org/abs/2203.03466&#34;&gt;Yang 2022.&lt;/a&gt;在将mup应用到Transformer的时候，对Attention Logits使用&lt;code&gt;$1/d_k$&lt;/code&gt;进行放缩，而不是传统上的&lt;code&gt;$1/\sqrt{d_k}$&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;我不禁回想起很多年前在知乎的一个问题：&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.zhihu.com/question/339723385/answer/782509914&#34;&gt;transformer中的attention为什么scaled? - Nil-9的回答&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;当时笔者沿着&lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;Vaswani 2017.&lt;/a&gt;的一个脚注，展开写了这样一篇回答，其数学原理并不复杂，浓缩版本是这样的：&lt;/p&gt;
