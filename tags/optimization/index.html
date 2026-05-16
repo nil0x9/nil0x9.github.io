@@ -11,7 +11,7 @@ RMNP 实验效果
 这里有个很有意思的结论，作者从“行归一化与正交化在高维下渐进等价”这个角度出发，用行归一化取代 Muon，取得了超越 Muon 的结果。这就好像「在模仿吴亦凡的比赛中吴亦凡获得了第二名」，听起来令人匪夷所思。
 渐进等价的逻辑漏洞 RMNP 的核心逻辑是：因为
 $$ V_tV_t^\top \approx \operatorname{diag}(V_tV_t^\top), $$
-所以可以用后者替代前者，效果差不多。这里其实有一个比较模型的漏洞，即便对称矩阵 $A$ 如果在 rms norm 的意义下近似于一个对角矩阵 $D$，使用 $A^{-1/2}$ 和 $D^{-1/2}$ 作为 preconditioner 的效果却可能差之千里。
+所以可以用后者替代前者，效果差不多。这里其实有一个比较明显的漏洞，即便对称矩阵 $A$ 如果在 rms norm 的意义下近似于一个对角矩阵 $D$，使用 $A^{-1/2}$ 和 $D^{-1/2}$ 作为 preconditioner 的效果却可能差之千里。
 ...</p></div><footer class=entry-footer><span title='2026-05-16 00:00:41 +0000 UTC'>2026-05-16</span>&nbsp;·&nbsp;Tianyang Lin</footer><a class=entry-link aria-label="post link to 行归一化取代 Muon？" href=https://nil9.net/posts/rownorm_optimizer/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>自定义CUDA kernel加速Muon优化器</h2></header><div class=entry-content><p>TL;DR 笔者通过自定义$XX^\top$算子，加速Muon优化器中的核心操作——Newton-Schulz迭代，算子单测在8192维度上相比原生实现计算时间降低约一半，端到端的Newton-Schulz迭代运行时间降低至原来的0.71倍。相关代码已经发布在：
 https://github.com/nil0x9/flash-muon
 读者可以通过如下方式来试用优化版本的Muon实现或者核心算子。

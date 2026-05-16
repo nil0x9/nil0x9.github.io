@@ -34,7 +34,7 @@
 &lt;h1 id=&#34;渐进等价的逻辑漏洞&#34;&gt;渐进等价的逻辑漏洞&lt;/h1&gt;
 &lt;p&gt;RMNP 的核心逻辑是：因为&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;$$ V_tV_t^\top \approx \operatorname{diag}(V_tV_t^\top), $$&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;所以可以用后者替代前者，效果差不多。这里其实有一个比较模型的漏洞，即便对称矩阵 &lt;code&gt;$A$&lt;/code&gt; 如果在 rms norm 的意义下近似于一个对角矩阵 &lt;code&gt;$D$&lt;/code&gt;，使用 &lt;code&gt;$A^{-1/2}$&lt;/code&gt; 和 &lt;code&gt;$D^{-1/2}$&lt;/code&gt; 作为 preconditioner 的效果却可能差之千里。&lt;/p&gt;</description>
+&lt;p&gt;所以可以用后者替代前者，效果差不多。这里其实有一个比较明显的漏洞，即便对称矩阵 &lt;code&gt;$A$&lt;/code&gt; 如果在 rms norm 的意义下近似于一个对角矩阵 &lt;code&gt;$D$&lt;/code&gt;，使用 &lt;code&gt;$A^{-1/2}$&lt;/code&gt; 和 &lt;code&gt;$D^{-1/2}$&lt;/code&gt; 作为 preconditioner 的效果却可能差之千里。&lt;/p&gt;</description>
     </item>
     <item>
       <title>简记：Attention Logits究竟如何放缩？</title>
