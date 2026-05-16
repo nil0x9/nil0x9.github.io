@@ -11,8 +11,31 @@
     </image>
     <generator>Hugo -- 0.145.0</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 22 May 2025 00:00:41 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 16 May 2026 00:00:41 +0000</lastBuildDate>
     <atom:link href="https://nil9.net/tags/dl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>行归一化取代 Muon？</title>
+      <link>https://nil9.net/posts/rownorm_optimizer/</link>
+      <pubDate>Sat, 16 May 2026 00:00:41 +0000</pubDate>
+      <guid>https://nil9.net/posts/rownorm_optimizer/</guid>
+      <description>&lt;h1 id=&#34;prologue&#34;&gt;Prologue&lt;/h1&gt;
+&lt;p&gt;最近有一些工作认为使用行归一化对梯度矩阵做 Precondition，可以替代 Muon 的正交化达到接近甚至超越的结果。例如前段时间一平做的&lt;a href=&#34;https://arxiv.org/abs/2603.09952&#34;&gt;Row/Column Normalization and Hyperparameter Transfer&lt;/a&gt;。虽然论文给了一些有趣的理论结果，但是当时我对他们的实验 setting 是有一些&lt;a href=&#34;https://x.com/tianylin/status/2031614280894919084?s=20&#34;&gt;质疑&lt;/a&gt;的。最近又有新的工作&lt;a href=&#34;https://arxiv.org/abs/2603.20527&#34;&gt;RMNP&lt;/a&gt;，声称使用行归一化达到了超越 Muon 的结果。&lt;/p&gt;
+&lt;p&gt;事实果真如此吗？按照笔者的经验，行归一化的效果其实跟 Adam 更接近，没有超越 Muon。本篇文章以 RMNP 为例来讨论下。&lt;/p&gt;
+&lt;h1 id=&#34;rmnp&#34;&gt;RMNP&lt;/h1&gt;
+&lt;p&gt;假设梯度的 Momentum 矩阵是 &lt;code&gt;$V_t$&lt;/code&gt;，Muon 使用：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ \Delta W\propto (V_tV_t^\top)^{-1/2}V_t. $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;而 RMNP 的 作者认为，因为 &lt;code&gt;$V_tV_t^\top$&lt;/code&gt; 大概率是一个对角主导的矩阵（对角线元素远大于非对角线元素），因此可以用如下的近似：
+&lt;code&gt;$$ \Delta W\propto \operatorname{diag}(V_tV_t^\top)^{-1/2}V_t. $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这等价于对 Momentum 矩阵每一行单独归一化.&lt;/p&gt;
+&lt;p&gt;这个假设不难理解，实际上就是非常经典的&lt;strong&gt;维度灾难&lt;/strong&gt;的问题，我对作者的这个假设先按下不表。看看作者的实验效果如何：&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+  &lt;img alt=&#34;RMNP 实验效果&#34; loading=&#34;lazy&#34; src=&#34;https://nil9.net/images/rownorm_optimizer/rmnp_exp.jpeg&#34; title=&#34;RMNP 实验效果&#34;&gt;&lt;figcaption class=&#34;image-caption&#34;&gt;RMNP 实验效果&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;这里有个很有意思的结论，作者从“行归一化与正交化在高维下渐进等价”这个角度出发，用行归一化取代 Muon，取得了超越 Muon 的结果。这就好像「在模仿吴亦凡的比赛中吴亦凡获得了第二名」，听起来令人匪夷所思。&lt;/p&gt;
+&lt;h1 id=&#34;渐进等价的逻辑漏洞&#34;&gt;渐进等价的逻辑漏洞&lt;/h1&gt;
+&lt;p&gt;RMNP 的核心逻辑是：因为&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ V_tV_t^\top \approx \operatorname{diag}(V_tV_t^\top), $$&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;所以有用后者替代前者，效果差不多。这里其实有一个比较模型的漏洞，即便对称矩阵 &lt;code&gt;$A$&lt;/code&gt; 如果在 rms norm 的意义下近似于一个对角矩阵 &lt;code&gt;$D$&lt;/code&gt;，使用 &lt;code&gt;$A^{-1/2}$&lt;/code&gt; 和 &lt;code&gt;$D^{-1/2}$&lt;/code&gt; 作为 preconditioner 的效果却可能差之千里。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>简记：Attention Logits究竟如何放缩？</title>
       <link>https://nil9.net/posts/attn-logits-scale/</link>
